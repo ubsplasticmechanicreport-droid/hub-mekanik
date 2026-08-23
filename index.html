@@ -107,11 +107,10 @@
             width: 30px;
             height: 30px;
             flex-shrink: 0;
+            background: #fff;
             border-radius: 5px;
             object-fit: cover;
-            padding: 4px;
-            background: var(--accent-strong);
-            color: #ffffff;
+            padding: 2px;
         }
 
         .logo-text {
@@ -338,15 +337,15 @@
             width: fit-content;
         }
 
-        .badge-soon {
-            background: #eceae5;
-            color: #7a7a75;
+        .badge-dev {
+            background: #faf1e2;
+            color: #b8730f;
         }
 
         @media (prefers-color-scheme: dark) {
-            .badge-soon {
-                background: #34373d;
-                color: #9a9a95;
+            .badge-dev {
+                background: #362a15;
+                color: #d69a4a;
             }
         }
 
@@ -1043,11 +1042,7 @@
     <div class="header">
         <div class="header-inner">
             <div class="logo">
-                <!-- SVG Icon Logo baru sebagai pengganti Base64 yang corrupt -->
-                <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="3"></circle>
-                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-                </svg>
+                <img src="icon-192.png" alt="Logo PT Usaha Bersama Sukses" class="logo-mark">
                 <div class="logo-text">UBS <span>Mekanik</span> Portal</div>
             </div>
             <div class="nav">
@@ -1065,12 +1060,6 @@
             <div class="hero-eyebrow">UBS1 &amp; UBS3 — Divisi Mekanik</div>
             <h1>Portal Tim Mekanik</h1>
             <p>Pusat pelaporan dan dokumentasi kerja Divisi Mekanik UBS1 &amp; UBS3, atas penugasan Pak Ronal — menggantikan pencatatan manual dengan sistem yang tercatat, tertelusuri, dan akuntabel.</p>
-            <div style="margin-top: 1.5rem;">
-                <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=rekap" target="_blank" class="button">
-                    <svg style="width: 18px; height: 18px; margin-right: 8px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
-                    Rekap Mingguan
-                </a>
-            </div>
         </div>
 
         <!-- Section 1: Laporan Harian -->
@@ -1174,7 +1163,7 @@
                     <div class="section-icon-tag">Parameter Proses</div>
                     <h2 style="font-size: 19px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                         Checksheet Mesin — Preventif &amp; Parameter Proses
-                        <span class="badge badge-soon" style="font-size: 10px; padding: 3px 9px;">Dalam Pengembangan</span>
+                        <span class="badge badge-dev" style="font-size: 10px; padding: 3px 9px;">Dalam Pengembangan</span>
                     </h2>
                 </div>
             </div>
@@ -1233,8 +1222,28 @@
             </div>
         </div>
 
-        <!-- Section 3: Jadwal & Rotasi Setup -->
-        <!-- Section: Susunan Tim Produksi (auto-update mingguan) -->
+        <!-- Section 3: KPI & Performa Metrik -->
+        <div style="margin-top: 2rem;">
+            <div class="section-label" style="margin-top: 0;">KPI &amp; Performa Metrik</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon-box" style="background:#faf1e2;color:#b8730f">
+                        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15.5V12M12.5 15.5V9M17 15.5v-5"/></svg>
+                    </div>
+                    <h3>Dashboard KPI &amp; Rekap Performa</h3>
+                    <p>Dashboard analitik operasional yang mencakup rekap mingguan laporan mekanik, analisis downtime per mesin, performa individual mekanik (foreman view), tren metrik bulanan, dan perbandingan antar shift.</p>
+                    <div style="margin-top: 0.8rem; margin-bottom: 1rem;">
+                        <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=rekap" target="_blank" class="button" style="width: fit-content; min-height: auto; padding: 8px 16px; font-size: 12px;">
+                            <svg style="width: 15px; height: 15px; margin-right: 6px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                            Buka Rekap Mingguan
+                        </a>
+                    </div>
+                    <span class="badge badge-dev">Dalam Pengembangan</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 4: Jadwal & Rotasi Setup -->
         <div id="jadwal" style="margin-top: 2rem;">
             <div class="section-label" style="margin-top: 0;">Susunan &amp; Rotasi Tim</div>
             <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 1.2rem; max-width: 700px;">
@@ -1495,21 +1504,6 @@
             }, { passive: true });
         })();
         </script>
-
-        <!-- Section 4: Segera Hadir -->
-        <div style="margin-top: 2rem;">
-            <div class="section-label" style="margin-top: 0;">Segera Hadir</div>
-            <div class="grid">
-                <div class="card">
-                    <div class="card-icon-box" style="background:#eceae5;color:#7a7a75">
-                        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15.5V12M12.5 15.5V9M17 15.5v-5"/></svg>
-                    </div>
-                    <h3>KPI &amp; Performance Metrics</h3>
-                    <p>Dashboard KPI tim, analisis downtime per mesin, performa individual mekanik (foreman view), tren metrik bulanan, dan perbandingan antar shift.</p>
-                    <span class="badge badge-soon">Segera Hadir</span>
-                </div>
-            </div>
-        </div>
 
         <!-- Info Box -->
         <div class="info-box">
