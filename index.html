@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UBS Mekanik Portal</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#11161d">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="UBS Mekanik">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #ffffff;
+            --header-bg: #11161d;
+            --header-text: #ffffff;
+            --text-primary: #1e2422;
+            --text-secondary: #5f5e5a;
+            --text-muted: #8b8d92;
+            --border-light: #e1ded2;
+            --accent: #35588a;
+            --accent-strong: #263f66;
+            --accent-light: #eaeff5;
+            --accent-teal: #0f6e56;
+            --accent-teal-light: #e5f3ee;
+            --accent-amber: #b8730f;
+            --accent-amber-light: #faf1e2;
+            --accent-slate: #4f5f6e;
+            --accent-slate-light: #edf0f2;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-primary: #14171b;
+                --bg-secondary: #1c2027;
+                --header-bg: #0b0e13;
+                --header-text: #f5f3f0;
+                --text-primary: #f0efec;
+                --text-secondary: #b8b7b2;
+                --text-muted: #8b8d92;
+                --border-light: #30343c;
+                --accent: #7b98c2;
+                --accent-strong: #9db3d6;
+                --accent-light: #1e2a3a;
+                --accent-teal: #4fb493;
+                --accent-teal-light: #17332b;
+                --accent-amber: #d69a4a;
+                --accent-amber-light: #362a15;
+                --accent-slate: #9aa7b3;
+                --accent-slate-light: #232a30;
+            }
+        }
+
+        html, body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            font-feature-settings: 'tnum' 1, 'ss01' 1;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--header-bg);
+            border-bottom: 3px solid var(--accent);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        @media (min-width: 768px) {
+            .header-inner {
+                padding: 1.4rem 2rem;
+                gap: 2rem;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-mark {
+            width: 30px;
+            height: 30px;
+            flex-shrink: 0;
+            background: #fff;
+            border-radius: 5px;
+            object-fit: cover;
+            padding: 2px;
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            color: var(--header-text);
+        }
+
+        .logo-text span {
+            color: #8aa8cc;
+        }
+
+        @media (min-width: 768px) {
+            .logo-mark {
+                width: 34px;
+                height: 34px;
+                font-size: 14px;
+            }
+            .logo-text {
+                font-size: 19px;
+                letter-spacing: 1.5px;
+            }
+        }
+
+        .nav {
+            display: flex;
+            gap: 1.2rem;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 768px) {
+            .nav {
+                gap: 2rem;
+                font-size: 13px;
+            }
+        }
+
+        .nav a {
+            color: #b8bdc4;
+            text-decoration: none;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+        }
+
+        .nav a:hover {
+            color: var(--header-text);
+            border-color: var(--accent-strong);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 2rem 2rem;
+            }
+        }
+
+        .hero {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .hero-eyebrow {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            margin-bottom: 0.6rem;
+        }
+
+        .hero h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.6rem;
+            text-transform: uppercase;
+        }
+
+        @media (min-width: 768px) {
+            .hero h1 {
+                font-size: 36px;
+            }
+        }
+
+        .hero p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.5;
+        }
+
+        @media (min-width: 768px) {
+            .hero p {
+                font-size: 16px;
+            }
+        }
+
+        .section-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1.6rem;
+            margin-bottom: 1.2rem;
+            padding-left: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        @media (min-width: 768px) {
+            .section-label {
+                font-size: 14px;
+                margin-top: 2rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+        }
+
+        @media (min-width: 640px) {
+            .grid {
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-top: 3px solid var(--border-light);
+            border-radius: 4px;
+            padding: 1.2rem;
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+            display: flex;
+            flex-direction: column;
+        }
+
+        @media (min-width: 768px) {
+            .card {
+                padding: 1.2rem;
+            }
+        }
+
+        .card:hover {
+            border-top-color: var(--accent);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .card-icon {
+            font-size: 26px;
+            margin-bottom: 0.8rem;
+            line-height: 1;
+        }
+
+        @media (min-width: 768px) {
+            .card-icon {
+                font-size: 30px;
+                margin-bottom: 1rem;
+            }
+        }
+
+        .card h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        @media (min-width: 768px) {
+            .card h3 {
+                font-size: 16px;
+            }
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        @media (min-width: 768px) {
+            .card p {
+                font-size: 14px;
+            }
+        }
+
+        .card-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .badge {
+            display: inline-block;
+            background: var(--accent-light);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 3px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            width: fit-content;
+        }
+
+        .badge-soon {
+            background: #eceae5;
+            color: #7a7a75;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .badge-soon {
+                background: #34373d;
+                color: #9a9a95;
+            }
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 1.5rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .divider {
+                margin: 2rem 0;
+            }
+        }
+
+        .info-box {
+            background: var(--accent-light);
+            padding: 1rem 1rem 1rem 0.9rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+            margin: 1.5rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .info-box {
+                padding: 1.5rem;
+                border-left: 4px solid var(--accent);
+                margin: 2rem 0;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .info-box {
+                background: #223038;
+            }
+        }
+
+        .info-box p {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .info-box strong {
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 0.4rem;
+            color: var(--accent);
+        }
+
+        .button {
+            display: inline-block;
+            background: var(--accent-strong);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+            border: none;
+            cursor: pointer;
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .button {
+                padding: 12px 22px;
+                min-height: auto;
+                display: inline-flex;
+            }
+        }
+
+        .button:hover {
+            background: var(--accent);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .button-outline {
+            background: transparent;
+            color: var(--accent-strong);
+            border: 2px solid var(--accent-strong);
+        }
+
+        .button-outline:hover {
+            background: var(--accent-light);
+            box-shadow: none;
+        }
+
+        .embed-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-top: 3px solid var(--accent);
+            border-radius: 4px;
+            padding: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .embed-container {
+                padding: 1.5rem;
+                margin: 2rem 0;
+            }
+        }
+
+        .embed-container h2 {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+        }
+
+        /* ==== Icon kotak — dipasang di tiap section link utama & di card,
+           biar tiap link punya identitas visual sendiri (bukan cuma teks polos) ==== */
+        .section-icon-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-bottom: 0.9rem;
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            flex-shrink: 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+        }
+
+        .action-tile:hover .icon-box,
+        .role-card summary:hover .card-icon-box,
+        a.quick-link-box:hover .card-icon-box {
+            transform: scale(1.08);
+        }
+
+        .icon-box svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon-box.tone-blue,
+        .icon-box.tone-teal,
+        .icon-box.tone-amber,
+        .icon-box.tone-slate { background: var(--accent-slate-light); color: var(--accent-slate); }
+
+        @media (min-width: 768px) {
+            .icon-box { width: 50px; height: 50px; border-radius: 9px; }
+            .icon-box svg { width: 25px; height: 25px; }
+        }
+
+        .section-icon-heading h2 {
+            margin-bottom: 3px;
+        }
+
+        .section-icon-tag {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-muted);
+        }
+
+        .card-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            margin-bottom: 0.9rem;
+            background: var(--accent-light);
+            color: var(--accent);
+            transition: transform 0.25s cubic-bezier(.4,0,.2,1);
+        }
+
+        /* ==== Kartu role (SOP & Dokumentasi) bisa dibuka/ditutup — pakai <details> native
+           biar ringan, gak perlu JS, dan otomatis jalan di HP juga ==== */
+        .role-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-top: 3px solid var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+        }
+
+        .role-card[open] { border-top-color: var(--accent); }
+        .role-card.is-open { border-top-color: var(--accent); }
+
+        .role-card summary {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 1.1rem 1.2rem;
+            cursor: pointer;
+            list-style: none;
+        }
+
+        .role-card summary::-webkit-details-marker { display: none; }
+        .role-card summary::marker { content: ""; }
+
+        .role-card summary .card-icon-box { margin-bottom: 0; }
+
+        .role-card-head { flex: 1; min-width: 0; }
+
+        .role-card-head h3 {
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+
+        .role-card-teaser {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .role-chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.28s cubic-bezier(.4,0,.2,1); }
+        .role-chevron svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
+
+        .role-card[open] .role-chevron,
+        .role-card.is-open .role-chevron { transform: rotate(180deg); }
+
+        .role-card-body {
+            overflow: hidden;
+            height: 0;
+            transition: height 0.32s cubic-bezier(.4,0,.2,1);
+        }
+
+        .role-card-body-inner {
+            padding: 0 1.2rem 1.2rem;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .role-card-body-inner p { margin-bottom: 0.6rem; }
+        .role-card-body-inner p:last-child { margin-bottom: 0; }
+
+        /* ==== Scroll reveal — dipasang lewat JS (IntersectionObserver) ==== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.55s cubic-bezier(.4,0,.2,1), transform 0.55s cubic-bezier(.4,0,.2,1);
+        }
+
+        .reveal-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal { opacity: 1; transform: none; transition: none; }
+        }
+
+        /* ==== Animasi baris tabel susunan tim — masuk satu-satu (stagger) pas render,
+           dipakai di tabel Produksi Roster (JS) & tabel Setup (statis) ==== */
+        @keyframes rowRise {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .roster-row-anim {
+            animation: rowRise 0.5s cubic-bezier(.4,0,.2,1) both;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .roster-row-anim { animation: none; }
+        }
+
+        /* ==== Tab-slider Susunan Tim (Produksi / Setup) ==== */
+        .roster-tabs {
+            display: flex;
+            gap: 6px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-light);
+            border-radius: 9px;
+            padding: 4px;
+            margin-bottom: 1.2rem;
+        }
+
+        .roster-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 9px 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-secondary);
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+        }
+
+        .roster-tab-btn.active {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+        }
+
+        .roster-tab-btn:not(.active):hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .roster-slider {
+            overflow: hidden;
+            position: relative;
+            transition: height 0.35s cubic-bezier(.4,0,.2,1);
+        }
+
+        .roster-slider-track {
+            display: flex;
+            width: 200%;
+            transition: transform 0.4s cubic-bezier(.4,0,.2,1);
+        }
+
+        .roster-panel {
+            width: 50%;
+            flex-shrink: 0;
+            padding-right: 4px;
+            box-sizing: border-box;
+        }
+
+        /* ==== Visualisasi pola rotasi grup A/B/C (wheel yang muter otomatis) ==== */
+        .rotation-wheel-wrap {
+            margin-top: 1.4rem;
+            padding-top: 1.2rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .rotation-wheel-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.7rem;
+        }
+
+        .rotation-wheel {
+            position: relative;
+            height: 62px;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            overflow: hidden;
+        }
+
+        .rw-col {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 33.333%;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 5px;
+        }
+
+        .rw-col:nth-of-type(1) { left: 0; }
+        .rw-col:nth-of-type(2) { left: 33.333%; border-left: 1px dashed var(--border-light); border-right: 1px dashed var(--border-light); }
+        .rw-col:nth-of-type(3) { left: 66.666%; }
+
+        .rw-col-label {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .rw-badge {
+            position: absolute;
+            top: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            color: #fff;
+            transition: left 0.7s cubic-bezier(.4,0,.2,1);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .rw-badge.tone-blue { background: var(--accent); }
+        .rw-badge.tone-teal { background: var(--accent-teal); }
+        .rw-badge.tone-amber { background: var(--accent-amber); }
+
+        .rw-legend {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 0.7rem;
+        }
+
+        .rw-legend span { display: inline-flex; align-items: center; gap: 5px; }
+
+        .rw-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .rw-dot.tone-blue { background: var(--accent); }
+        .rw-dot.tone-teal { background: var(--accent-teal); }
+        .rw-dot.tone-amber { background: var(--accent-amber); }
+
+        .rw-week-indicator {
+            margin-top: 0.6rem;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .rw-badge { transition: none; }
+        }
+
+        /* ==== Action tile — link aksi (Buka Form/Log Pekerjaan/dst) dibungkus jadi
+           kartu kecil: icon kotak + judul + 1 baris keterangan, bukan cuma tombol teks polos ==== */
+        .action-tile-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0.7rem;
+            margin-top: 1rem;
+        }
+
+        @media (min-width: 560px) {
+            .action-tile-grid {
+                grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            }
+        }
+
+        .action-tile {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 7px;
+            padding: 0.9rem 1rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+        }
+
+        .action-tile:hover {
+            border-color: var(--accent);
+            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.09);
+            transform: translateY(-2px);
+        }
+
+        .action-tile .icon-box {
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+        }
+
+        .action-tile .icon-box svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .action-tile-title {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin-bottom: 2px;
+        }
+
+        .action-tile-desc {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+        }
+
+        .action-tile.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .action-tile.primary.tone-teal-primary,
+        .action-tile.primary.tone-amber-primary,
+        .action-tile.primary.tone-slate-primary { background: var(--accent-strong); border-color: var(--accent-strong); }
+
+        /* ==== Pembeda tim di dalam 1 kartu gabungan (Mekanik & WS nempel di 1 section) ==== */
+        .team-subhead {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-muted);
+            margin: 1.5rem 0 0.7rem;
+            padding-top: 1.3rem;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .team-subhead:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0.2rem;
+        }
+
+        .team-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+
+        .action-tile.primary .action-tile-title { color: #fff; }
+        .action-tile.primary .action-tile-desc { color: rgba(255,255,255,0.82); }
+        .action-tile.primary .icon-box { background: rgba(255,255,255,0.18); color: #fff; }
+
+        .embed-container iframe {
+            width: 100%;
+            min-height: 600px;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .footer {
+            background: var(--header-bg);
+            padding: 1.5rem 1rem;
+            text-align: center;
+            font-size: 12px;
+            color: #b8bdc4;
+            margin-top: 3rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer {
+                padding: 2rem;
+                font-size: 13px;
+            }
+        }
+
+        .footer p:first-child {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            color: var(--header-text);
+        }
+
+        @media (max-width: 640px) {
+            .nav {
+                order: 3;
+                width: 100%;
+                justify-content: flex-start;
+                gap: 1rem;
+            }
+
+            .embed-container {
+                padding: 1.2rem;
+            }
+        }
+
+        .quick-link-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-left: 3px solid var(--accent);
+            border-radius: 4px;
+            padding: 1rem;
+        }
+
+        a.quick-link-box:hover {
+            border-left-color: var(--accent-strong);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .attention-strip {
+            background: #fdf3e3;
+            border: 1px solid #e8c97a;
+            border-left: 3px solid #b8730f;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.65rem 0.9rem;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .attention-strip {
+                background: #3a331c;
+                border-color: #6b5a2a;
+                border-left-color: #d69a4a;
+            }
+        }
+
+        .attention-strip svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            stroke: #8a6100;
+            fill: none;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .attention-strip svg { stroke: #e8c97a; }
+        }
+
+        .attention-strip span {
+            font-size: 12px;
+            font-weight: 700;
+            color: #8a6100;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .attention-strip span {
+                color: #e8c97a;
+            }
+        }
+
+        .quick-link-label {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            font-weight: 700;
+        }
+        /* ==== Tabel responsif — di layar sempit, tabel lebar berubah jadi kartu
+           bertumpuk per baris (bukan dipaksa muat / discroll ke samping) ==== */
+        .responsive-table { width: 100%; border-collapse: collapse; }
+        @media (max-width: 640px) {
+            .responsive-table thead { display: none; }
+            .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
+                display: block; width: 100%;
+            }
+            .responsive-table tr {
+                margin-bottom: 0.8rem;
+                border: 1px solid var(--border-light);
+                border-radius: 6px;
+                overflow: hidden;
+            }
+            .responsive-table tr:last-child { margin-bottom: 0; }
+            .responsive-table td {
+                text-align: left !important;
+                padding: 8px 10px !important;
+                border: none !important;
+                border-bottom: 1px solid var(--border-light) !important;
+            }
+            .responsive-table td:last-child { border-bottom: none !important; }
+            .responsive-table td::before {
+                content: attr(data-label);
+                display: block;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.4px;
+                color: var(--accent-strong);
+                margin-bottom: 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <img class="logo-mark" src="data:image/png;base64,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" alt="Logo PT Usaha Bersama Sukses">
+                <div class="logo-text">UBS <span>Mekanik</span> Portal</div>
+            </div>
+            <div class="nav">
+                <a href="#beranda">Beranda</a>
+                <a href="#laporan">Laporan</a>
+                <a href="#dokumentasi">Dokumentasi</a>
+                <a href="#jadwal">Jadwal</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-eyebrow">UBS1 &amp; UBS3 — Divisi Mekanik</div>
+            <h1>Portal Tim Mekanik</h1>
+            <p>Pusat pelaporan dan dokumentasi kerja Divisi Mekanik UBS1 &amp; UBS3, atas penugasan Pak Ronal — menggantikan pencatatan manual dengan sistem yang tercatat, tertelusuri, dan akuntabel.</p>
+        </div>
+
+        <!-- Section 1: Laporan Harian -->
+        <div id="laporan"></div>
+
+        <div class="section-label">Laporan Tersedia</div>
+        <div id="embed-section" class="embed-container">
+            <div class="section-icon-row">
+                <div class="icon-box tone-blue">
+                    <svg viewBox="0 0 24 24"><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><rect x="5" y="5.5" width="14" height="16" rx="1.5"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></svg>
+                </div>
+                <div class="section-icon-heading">
+                    <div class="section-icon-tag">Laporan Harian</div>
+                    <h2 style="font-size: 19px;">Portal Laporan Harian Mekanik &amp; WS</h2>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 14px;">
+                Sistem pelaporan real-time untuk Tim Mekanik dan Tim Workshop (WS). Mekanik mencakup status produksi, setup, trial mould, dan troubleshooting; Workshop mencakup log kerja fabrikasi/tooling. Berlaku untuk UBS1 &amp; UBS3.
+            </p>
+
+            <div class="attention-strip">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3L12 4.5Z"/><path d="M12 10v4.2M12 17.2v.1"/></svg>
+                <span>Wajib dibaca sebelum mulai shift — cek log pekerjaan shift sebelumnya</span>
+            </div>
+
+            <div class="team-subhead"><span class="team-dot" style="background:var(--accent)"></span>Tim Mekanik</div>
+            <div class="action-tile-grid">
+                <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec" target="_blank" class="action-tile primary">
+                    <div class="icon-box tone-blue"><svg viewBox="0 0 24 24"><path d="M4 20 5 16.2 16.2 5A2 2 0 0 1 19 7.8L7.8 19 4 20Z"/><path d="M14 7l3 3"/></svg></div>
+                    <div><div class="action-tile-title">Buka Form Laporan Harian</div><div class="action-tile-desc">Input laporan Produksi, Setup, Trial, atau Kerusakan Belum Tuntas</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=dashboard" target="_blank" class="action-tile">
+                    <div class="icon-box tone-blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
+                    <div><div class="action-tile-title">Log Pekerjaan</div><div class="action-tile-desc">Histori pekerjaan shift sebelumnya — cek dulu sebelum mulai tugas</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=riwayat" target="_blank" class="action-tile">
+                    <div class="icon-box tone-blue"><svg viewBox="0 0 24 24"><path d="M4 6.5c0-1.4 3.6-2.5 8-2.5s8 1.1 8 2.5-3.6 2.5-8 2.5-8-1.1-8-2.5Z"/><path d="M4 6.5V17c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V6.5"/><path d="M4 11.8c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5"/></svg></div>
+                    <div><div class="action-tile-title">Riwayat Mesin &amp; Mould</div><div class="action-tile-desc">Riwayat lengkap per mesin/mould, dari semua jenis laporan</div></div>
+                </a>
+            </div>
+
+            <div class="team-subhead"><span class="team-dot" style="background:var(--accent-teal)"></span>Tim Workshop (WS)</div>
+            <div class="action-tile-grid">
+                <a href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec" target="_blank" class="action-tile primary tone-teal-primary">
+                    <div class="icon-box tone-teal"><svg viewBox="0 0 24 24"><path d="M14.5 6.5a3.5 3.5 0 0 0-4.6 4.6l-6.4 6.4a1.7 1.7 0 0 0 2.4 2.4l6.4-6.4a3.5 3.5 0 0 0 4.6-4.6l-2.3 2.3-2-2 2.3-2.3Z"/></svg></div>
+                    <div><div class="action-tile-title">Buka Form Laporan Harian</div><div class="action-tile-desc">Input laporan kerja Workshop (fabrikasi/tooling) harian</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec?view=dashboard" target="_blank" class="action-tile">
+                    <div class="icon-box tone-teal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
+                    <div><div class="action-tile-title">Log Pekerjaan</div><div class="action-tile-desc">Histori laporan Workshop harian</div></div>
+                </a>
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 1.5rem;">
+                <strong>Log Pekerjaan</strong> — lihat histori pekerjaan yang telah diselesaikan pada shift sebelumnya, sebagai referensi sebelum memulai tugas pada shift berjalan.
+            </p>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 0.5rem;">
+                <strong>Catatan:</strong> simpan tautan ini untuk akses cepat. Data diperbarui otomatis. Hubungi Adhit apabila terdapat kendala.
+            </p>
+        </div>
+
+        <div class="embed-container">
+            <div class="section-icon-row">
+                <div class="icon-box tone-slate">
+                    <svg viewBox="0 0 24 24"><path d="M11.5 3.5 20 12l-8.5 8.5a1.7 1.7 0 0 1-2.4 0L3.5 14.9a1.7 1.7 0 0 1 0-2.4L11.5 3.5Z"/><circle cx="15.5" cy="8.5" r="1.2" fill="currentColor" stroke="none"/></svg>
+                </div>
+                <div class="section-icon-heading">
+                    <div class="section-icon-tag">Labeling &amp; Leaktest</div>
+                    <h2 style="font-size: 19px;">Portal Laporan Setup Labeling</h2>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 14px;">
+                Menggunakan form yang sama dengan Workshop — pilih panel <strong>Labeling</strong> di dalamnya. Menampilkan log kerja Setup Labeling (labeling &amp; leaktest botol) untuk UBS1 &amp; UBS3.
+            </p>
+
+            <div class="attention-strip">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3L12 4.5Z"/><path d="M12 10v4.2M12 17.2v.1"/></svg>
+                <span>Wajib dibaca sebelum mulai shift — cek log pekerjaan shift sebelumnya</span>
+            </div>
+
+            <div class="action-tile-grid">
+                <a href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec" target="_blank" class="action-tile primary tone-slate-primary">
+                    <div class="icon-box tone-slate"><svg viewBox="0 0 24 24"><path d="M4 20 5 16.2 16.2 5A2 2 0 0 1 19 7.8L7.8 19 4 20Z"/><path d="M14 7l3 3"/></svg></div>
+                    <div><div class="action-tile-title">Buka Form Laporan Harian</div><div class="action-tile-desc">Input laporan Setup Labeling &amp; leaktest botol harian</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec?view=dashboard" target="_blank" class="action-tile">
+                    <div class="icon-box tone-slate"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></div>
+                    <div><div class="action-tile-title">Log Pekerjaan</div><div class="action-tile-desc">Histori laporan Setup Labeling harian</div></div>
+                </a>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 1.5rem;">
+                <strong>Log Pekerjaan</strong> — lihat histori pekerjaan Setup Labeling harian.
+            </p>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 0.5rem;">
+                <strong>Catatan:</strong> simpan tautan ini untuk akses cepat. Data diperbarui otomatis. Hubungi Adhit apabila terdapat kendala.
+            </p>
+        </div>
+
+        <div class="embed-container">
+            <div class="section-icon-row">
+                <div class="icon-box tone-amber">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 13 15 9.5M12 6.5V5M12 21v-1.5M5.5 13H4M20 13h-1.5"/></svg>
+                </div>
+                <div class="section-icon-heading">
+                    <div class="section-icon-tag">Parameter Proses</div>
+                    <h2 style="font-size: 19px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        Checksheet Mesin — Preventif &amp; Parameter Proses
+                        <span class="badge badge-soon" style="font-size: 10px; padding: 3px 9px;">Dalam Pengembangan</span>
+                    </h2>
+                </div>
+            </div>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 14px;">
+                Pengisian checklist preventif dan parameter proses mesin EBM dilakukan setiap shift, langsung melalui perangkat HP. Berbeda dari Laporan Harian di atas, checksheet ini bukan mengenai kejadian atau kendala, melainkan mengenai <strong>angka parameter mesin</strong> yang harus selalu berada dalam standar.
+            </p>
+
+            <div class="attention-strip">
+                <svg viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3L12 4.5Z"/><path d="M12 10v4.2M12 17.2v.1"/></svg>
+                <span>Isi tiap shift, jangan ditunda — parameter di luar standar harus segera dilaporkan</span>
+            </div>
+
+            <div class="action-tile-grid">
+                <a href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec" target="_blank" class="action-tile primary tone-amber-primary">
+                    <div class="icon-box tone-amber"><svg viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 8.5 10.5 10 14 6.5"/><path d="M9 14.5h6M9 17h4"/></svg></div>
+                    <div><div class="action-tile-title">Isi Checksheet</div><div class="action-tile-desc">Checklist preventif &amp; parameter proses mesin EBM per shift</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec?view=print" target="_blank" class="action-tile">
+                    <div class="icon-box tone-amber"><svg viewBox="0 0 24 24"><path d="M7 8.5V4h10v4.5"/><rect x="5" y="8.5" width="14" height="7" rx="1"/><rect x="7" y="14" width="10" height="6"/></svg></div>
+                    <div><div class="action-tile-title">Cetak Laporan Bulanan</div><div class="action-tile-desc">Print rekap checksheet preventif &amp; parameter per bulan</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec?view=qrsheet" target="_blank" class="action-tile">
+                    <div class="icon-box tone-amber"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M15 15h2v2h-2zM19 15h1M15 19h1M19 19h1"/></svg></div>
+                    <div><div class="action-tile-title">Lembar QR Mesin</div><div class="action-tile-desc">Cetak QR buat ditempel di panel — skip pilih mesin manual</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbyJxAsf987sr3IFW_vfqFS21BmMBZdydy-p0QwAD88fJ1IR1enBMm8W9rycGOOwLcfM/exec" target="_blank" class="action-tile">
+                    <div class="icon-box tone-amber"><svg viewBox="0 0 24 24"><path d="M5 19V5m0 14h14M9 19v-6M13 19v-9M17 19v-4"/></svg></div>
+                    <div><div class="action-tile-title">Isi Standar Parameter</div><div class="action-tile-desc">Input/update angka standar tiap parameter mesin</div></div>
+                </a>
+                <a href="https://script.google.com/macros/s/AKfycbyJxAsf987sr3IFW_vfqFS21BmMBZdydy-p0QwAD88fJ1IR1enBMm8W9rycGOOwLcfM/exec?view=dashboard" target="_blank" class="action-tile">
+                    <div class="icon-box tone-amber"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 5v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5M9 9h6M9 13h6M9 17h3"/></svg></div>
+                    <div><div class="action-tile-title">Lihat Standar Parameter</div><div class="action-tile-desc">Referensi angka standar — acuan pas setting/cek penyimpangan</div></div>
+                </a>
+            </div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 1rem;">
+                <strong>Isi Checksheet</strong> — pilih mesin terlebih dahulu, kemudian pilih Preventif (7 item, 1x/hari) atau Parameter Proses (numerik, 3x/shift). Jika terdapat QR code yang terpasang di panel mesin, pindai langsung untuk melewati proses pemilihan mesin secara manual.
+            </p>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 0.5rem;">
+                <strong>Catatan:</strong> saat ini baru tersedia untuk mesin EBM (UBS3); mesin IMM (UBS1) masih dalam pengembangan. Simpan tautan ini untuk akses cepat. Hubungi Adhit apabila terdapat kendala.
+            </p>
+        </div>
+
+        <!-- Section 2: SOP & Dokumentasi Teknis -->
+        <div id="dokumentasi">
+            <div class="section-label">SOP &amp; Dokumentasi Teknis</div>
+            <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 1.5rem; max-width: 700px;">
+                Ringkasan tanggung jawab tiap level mekanik, mencakup batas kerja masing-masing dan ketentuan eskalasi ke divisi lain.
+            </p>
+            <div class="grid">
+                <details class="role-card" open>
+                    <summary>
+                        <div class="card-icon-box" style="background:var(--accent-light);color:var(--accent)"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.8" r="3.2"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></div>
+                        <div class="role-card-head">
+                            <h3>Mekanik Reguler</h3>
+                            <span class="role-card-teaser">Jaga output produksi &amp; parameter proses</span>
+                        </div>
+                        <span class="role-chevron"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+                    </summary>
+                    <div class="role-card-body">
+                        <div class="role-card-body-inner">
+                        <p>Bertanggung jawab menjaga output produksi, dengan menekan angka reject (NG) melalui pengaturan parameter proses dan perbaikan yang berkaitan dengan kualitas produk, baik pada mesin EBM maupun IMM. Pada lini yang menggunakan robot, tanggung jawab ini mencakup pengaturan parameter robot serta perbaikan kondisi end tool yang mengalami misalignment.</p>
+                        <p style="font-size: 12px;">Di luar tanggung jawab: kerusakan berat (hidraulik, perakitan mesin, chiller, kerusakan general/besar) menjadi tanggung jawab <strong>MTC</strong>. Kendala pada mould/tool eskalasi ke <strong>WS</strong>. Kendala yang bersifat rumit dilaporkan kepada Foreman.</p>
+                    </div>
+                    </div>
+                </details>
+
+                <details class="role-card" open>
+                    <summary>
+                        <div class="card-icon-box" style="background:var(--accent-teal-light);color:var(--accent-teal)"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7.8" r="2.6"/><path d="M3 19c0-3 2.2-5.4 5-5.4s5 2.4 5 5.4"/><circle cx="17" cy="9" r="2.2"/><path d="M13.5 19c.3-2.5 2-4.4 4-4.4"/></svg></div>
+                        <div class="role-card-head">
+                            <h3>Mekanik Setup</h3>
+                            <span class="role-card-teaser">Pergantian model &amp; parameter produk baru</span>
+                        </div>
+                        <span class="role-chevron"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+                    </summary>
+                    <div class="role-card-body">
+                        <div class="role-card-body-inner">
+                        <p>Bertanggung jawab atas proses pergantian model (changeover), meliputi pemasangan dan pelepasan mould serta pengaturan ulang parameter untuk produk baru. Apabila terdapat kendala pada proses setup, eskalasi dilakukan kepada <strong>WS</strong> untuk urusan mould/tool, atau kepada <strong>MTC</strong> untuk urusan mesin.</p>
+                    </div>
+                    </div>
+                </details>
+
+                <details class="role-card" open>
+                    <summary>
+                        <div class="card-icon-box" style="background:var(--accent-amber-light);color:var(--accent-amber)"><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="7.8" r="3.2"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M9.5 6.2 12 4.5l2.5 1.7"/></svg></div>
+                        <div class="role-card-head">
+                            <h3>Foreman Shift</h3>
+                            <span class="role-card-teaser">Coaching tim &amp; jenjang eskalasi pertama</span>
+                        </div>
+                        <span class="role-chevron"><svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg></span>
+                    </summary>
+                    <div class="role-card-body">
+                        <div class="role-card-body-inner">
+                        <p>Selain mengawasi laporan tim, Foreman berperan sebagai pembimbing (coach) bagi anggota tim, memimpin penanganan kendala yang bersifat rumit di lapangan, serta menyusun analisis permasalahan harian untuk dibahas dengan atasan. Foreman shift menjadi jenjang pelaporan pertama bagi Mekanik Reguler sebelum eskalasi lebih lanjut.</p>
+                    </div>
+                    </div>
+                </details>
+            </div>
+        </div>
+
+        <!-- Section 3: Jadwal & Rotasi Setup -->
+        <!-- Section: Susunan Tim Produksi (auto-update mingguan) -->
+        <div id="jadwal" style="margin-top: 2rem;">
+            <div class="section-label" style="margin-top: 0;">Susunan &amp; Rotasi Tim</div>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 1.2rem; max-width: 700px;">
+                Lebih dari 50 unit mesin EBM &amp; IMM beroperasi 3 shift nonstop — semuanya dijaga tim mekanik yang bergilir. Grup Produksi (A/B/C) gantian shift tiap minggu; Tim Setup nempel bergilir ke tiap grup tiap bulan. Data di bawah otomatis mengikuti kondisi yang berlaku saat ini.
+            </p>
+
+            <div class="embed-container">
+                <div class="roster-tabs" role="tablist">
+                    <button type="button" class="roster-tab-btn active" data-target="produksi" aria-selected="true">Tim Produksi</button>
+                    <button type="button" class="roster-tab-btn" data-target="setup" aria-selected="false">Tim Setup</button>
+                </div>
+
+                <div class="roster-slider" id="rosterSlider">
+                    <div class="roster-slider-track" id="rosterTrack">
+                        <div class="roster-panel" data-panel="produksi">
+                            <div id="produksiRosterMeta" style="font-size: 12px; color: var(--text-muted); margin-bottom: 0.8rem;"></div>
+                            <div id="produksiRosterTable" style="overflow-x: auto;"></div>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 0.8rem;">
+                                🔁 Otomatis muter tiap minggu (patokan 26 Jul 2026, siklus 3 minggu). Ada penyesuaian dadakan di lapangan? konfirmasi ke Foreman/Kasie.
+                            </p>
+
+                            <div class="rotation-wheel-wrap">
+                                <div class="rotation-wheel-label">Visualisasi Pola Rotasi (siklus 3 minggu)</div>
+                                <div class="rotation-wheel" id="rotationWheel">
+                                    <div class="rw-col"><span class="rw-col-label">Shift 1</span></div>
+                                    <div class="rw-col"><span class="rw-col-label">Shift 2</span></div>
+                                    <div class="rw-col"><span class="rw-col-label">Shift 3</span></div>
+                                    <div class="rw-badge tone-blue" data-grup="A">A</div>
+                                    <div class="rw-badge tone-teal" data-grup="B">B</div>
+                                    <div class="rw-badge tone-amber" data-grup="C">C</div>
+                                </div>
+                                <div class="rw-legend">
+                                    <span><span class="rw-dot tone-blue"></span>A — Carles</span>
+                                    <span><span class="rw-dot tone-teal"></span>B — Jalaludin</span>
+                                    <span><span class="rw-dot tone-amber"></span>C — Guntur</span>
+                                </div>
+                                <div class="rw-week-indicator" id="rwWeekIndicator"></div>
+                            </div>
+                        </div>
+                        <div class="roster-panel" data-panel="setup">
+                            <div style="overflow-x: auto;">
+                                <table class="responsive-table" style="font-size: 13px; min-width: 380px;">
+                                    <thead>
+                                        <tr style="background: var(--accent-teal-light);">
+                                            <th style="text-align: left; padding: 10px 12px; border: 1px solid var(--border-light); color: var(--accent-teal);">Shift</th>
+                                            <th style="text-align: left; padding: 10px 12px; border: 1px solid var(--border-light); color: var(--accent-teal);">Personel</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="roster-row-anim" style="animation-delay:0s">
+                                            <td style="padding: 10px 12px; border: 1px solid var(--border-light); font-weight: 700;">Shift 1</td>
+                                            <td data-label="Personel" style="padding: 10px 12px; border: 1px solid var(--border-light);">Ridwan &amp; Arif</td>
+                                        </tr>
+                                        <tr class="roster-row-anim" style="animation-delay:0.09s">
+                                            <td style="padding: 10px 12px; border: 1px solid var(--border-light); font-weight: 700;">Shift 2</td>
+                                            <td data-label="Personel" style="padding: 10px 12px; border: 1px solid var(--border-light);">Boston &amp; Kodir</td>
+                                        </tr>
+                                        <tr class="roster-row-anim" style="animation-delay:0.18s">
+                                            <td style="padding: 10px 12px; border: 1px solid var(--border-light); font-weight: 700;">Shift 3</td>
+                                            <td data-label="Personel" style="padding: 10px 12px; border: 1px solid var(--border-light); color: var(--text-muted); font-style: italic;">Kosong — belum ada personel Setup</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p style="font-size: 12px; color: #a3402f; background: #FDECEA; border-left: 3px solid #a3402f; padding: 8px 12px; border-radius: 4px; margin-top: 0.8rem;">
+                                <strong>Catatan:</strong> Shift 3 saat ini kosong personel Setup — kalau ada kebutuhan setup mendadak di shift ini, koordinasi ke Foreman/Kasie.
+                            </p>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 0.6rem;">
+                                Tiap pasangan Setup nempel ke grup A/B/C bulanan (patokan hari Senin), gantian biar beban gak numpuk di 1 grup terus. Susunan bisa berubah sewaktu-waktu — cek ke Kasie/Foreman buat konfirmasi terkini.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+        (function(){
+            var GROUPS = {
+                A: { foreman: 'Carles', ubs3: 'Nugi & Heri J', ubs1: 'Adi & Ikbal' },
+                B: { foreman: 'Jalaludin', ubs3: 'Didi & Rizal', ubs1: 'Andi & Oki' },
+                C: { foreman: 'Guntur', ubs3: 'Fajar & Hamdan', ubs1: 'Arifin & <span title="Foreman">Rela</span>' }
+            };
+            var CYCLE = {
+                1: { 1: 'C', 2: 'B', 3: 'A' },
+                2: { 1: 'B', 2: 'A', 3: 'C' },
+                3: { 1: 'A', 2: 'C', 3: 'B' }
+            };
+            var ANCHOR_SUNDAY = new Date(2026, 6, 26); // 26 Jul 2026, siklus Minggu-1
+
+            function sundayOfWeek(d) {
+                var r = new Date(d);
+                r.setDate(d.getDate() - d.getDay());
+                r.setHours(0, 0, 0, 0);
+                return r;
+            }
+            function mingguKe(sunday) {
+                var weeks = Math.floor((sunday - ANCHOR_SUNDAY) / (7 * 24 * 60 * 60 * 1000));
+                return (((weeks % 3) + 3) % 3) + 1;
+            }
+            function fmt(d) {
+                return ('0' + d.getDate()).slice(-2) + '/' + ('0' + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear();
+            }
+
+            var now = new Date();
+            var sunday = sundayOfWeek(now);
+            var sabtu = new Date(sunday); sabtu.setDate(sunday.getDate() + 6);
+            var mapping = CYCLE[mingguKe(sunday)];
+
+            document.getElementById('produksiRosterMeta').textContent = 'Berlaku ' + fmt(sunday) + ' – ' + fmt(sabtu);
+
+            var html = '<table class="responsive-table" style="font-size:13px;min-width:480px">' +
+                '<thead><tr style="background:var(--accent-light)">' +
+                '<th style="text-align:left;padding:8px 10px;border:1px solid var(--border-light);color:var(--accent-strong)">Shift</th>' +
+                '<th style="text-align:left;padding:8px 10px;border:1px solid var(--border-light);color:var(--accent-strong)">Foreman</th>' +
+                '<th style="text-align:left;padding:8px 10px;border:1px solid var(--border-light);color:var(--accent-strong)">Tim UBS3</th>' +
+                '<th style="text-align:left;padding:8px 10px;border:1px solid var(--border-light);color:var(--accent-strong)">Tim UBS1</th>' +
+                '</tr></thead><tbody>';
+            [1, 2, 3].forEach(function(s) {
+                var g = GROUPS[mapping[s]];
+                var delay = ((s - 1) * 0.09).toFixed(2);
+                html += '<tr class="roster-row-anim" style="animation-delay:' + delay + 's"><td style="padding:8px 10px;border:1px solid var(--border-light);font-weight:700">Shift ' + s + '</td>' +
+                    '<td data-label="Foreman" style="padding:8px 10px;border:1px solid var(--border-light)">' + g.foreman + ' <span style="color:var(--text-muted)">(Grup ' + mapping[s] + ')</span></td>' +
+                    '<td data-label="Tim UBS3" style="padding:8px 10px;border:1px solid var(--border-light)">' + g.ubs3 + '</td>' +
+                    '<td data-label="Tim UBS1" style="padding:8px 10px;border:1px solid var(--border-light)">' + g.ubs1 + '</td></tr>';
+            });
+            html += '</tbody></table>';
+            document.getElementById('produksiRosterTable').innerHTML = html;
+
+            // ==== Visualisasi posisi grup A/B/C pada siklus rotasi minggu berjalan.
+            // Statis — menampilkan kondisi minggu ini saja, tanpa animasi berulang. ====
+            var wheel = document.getElementById('rotationWheel');
+            var weekIndicator = document.getElementById('rwWeekIndicator');
+            if (wheel && weekIndicator) {
+                var minggu = mingguKe(sunday);
+
+                function shiftForGrup(week, grup) {
+                    var map = CYCLE[week];
+                    for (var s in map) { if (map[s] === grup) return parseInt(s, 10); }
+                }
+                function positionBadges(week) {
+                    var w = wheel.clientWidth;
+                    var colW = w / 3;
+                    ['A', 'B', 'C'].forEach(function (g) {
+                        var badge = wheel.querySelector('.rw-badge[data-grup="' + g + '"]');
+                        var shift = shiftForGrup(week, g);
+                        var centerX = (shift - 1) * colW + colW / 2;
+                        badge.style.left = (centerX - badge.offsetWidth / 2) + 'px';
+                    });
+                }
+                function setIndicator(week) {
+                    weekIndicator.textContent = 'Minggu ke-' + week + ' dalam siklus — minggu berjalan';
+                }
+
+                positionBadges(minggu);
+                setIndicator(minggu);
+                window.addEventListener('resize', function () { positionBadges(minggu); });
+            }
+        })();
+        </script>
+        <script>
+        // ==== Tab-slider Susunan Tim — Produksi <-> Setup. Ketinggian slider disamain
+        // ke panel tertinggi (dihitung sekali) biar gak ada konten kepotong pas pindah tab,
+        // dan gak perlu animasi tinggi tiap switch (transisinya cukup geser + fade). ====
+        (function(){
+            var track = document.getElementById('rosterTrack');
+            var slider = document.getElementById('rosterSlider');
+            var buttons = document.querySelectorAll('.roster-tab-btn');
+            var panels = document.querySelectorAll('.roster-panel');
+            if (!track || !slider) return;
+
+            function syncHeight(){
+                var maxH = 0;
+                panels.forEach(function(p){ maxH = Math.max(maxH, p.scrollHeight); });
+                slider.style.height = maxH + 'px';
+            }
+            // kasih jeda dikit biar tabel produksi (di-generate script sebelumnya) sempat kerender
+            setTimeout(syncHeight, 30);
+            window.addEventListener('resize', syncHeight);
+
+            buttons.forEach(function(btn){
+                btn.addEventListener('click', function(){
+                    if (btn.classList.contains('active')) return;
+                    buttons.forEach(function(b){ b.classList.remove('active'); b.setAttribute('aria-selected', 'false'); });
+                    btn.classList.add('active'); btn.setAttribute('aria-selected', 'true');
+                    var target = btn.getAttribute('data-target');
+                    track.style.transform = target === 'setup' ? 'translateX(-50%)' : 'translateX(0)';
+                });
+            });
+
+            // swipe geser di HP
+            var touchStartX = null;
+            track.addEventListener('touchstart', function(e){ touchStartX = e.touches[0].clientX; }, { passive: true });
+            track.addEventListener('touchend', function(e){
+                if (touchStartX === null) return;
+                var dx = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(dx) > 45){
+                    var activeBtn = document.querySelector('.roster-tab-btn.active');
+                    var target = activeBtn && activeBtn.getAttribute('data-target') === 'produksi' && dx < 0 ? 'setup'
+                        : (activeBtn && activeBtn.getAttribute('data-target') === 'setup' && dx > 0 ? 'produksi' : null);
+                    if (target) {
+                        var btn = document.querySelector('.roster-tab-btn[data-target="' + target + '"]');
+                        if (btn) btn.click();
+                    }
+                }
+                touchStartX = null;
+            }, { passive: true });
+        })();
+        </script>
+
+        <!-- Section 4: Segera Hadir -->
+        <div style="margin-top: 2rem;">
+            <div class="section-label" style="margin-top: 0;">Segera Hadir</div>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon-box" style="background:#eceae5;color:#7a7a75">
+                        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 15.5V12M12.5 15.5V9M17 15.5v-5"/></svg>
+                    </div>
+                    <h3>KPI &amp; Performance Metrics</h3>
+                    <p>Dashboard KPI tim, analisis downtime per mesin, performa individual mekanik (foreman view), tren metrik bulanan, dan perbandingan antar shift.</p>
+                    <span class="badge badge-soon">Segera Hadir</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Box -->
+        <div class="info-box">
+            <p>
+                <strong>Akses &amp; Keamanan</strong>
+                Portal ini dapat diakses oleh seluruh mekanik UBS. Laporan Harian bersifat umum untuk transparansi operasional. Data sensitif (KPI individual, metrik performa) akan dibatasi untuk Foreman ke atas begitu fitur ini diluncurkan.
+            </p>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Quick Links -->
+        <div style="margin: 2rem 0;">
+            <div class="section-label" style="margin-top: 0;">Akses Cepat</div>
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="quick-link-box">
+                    <p class="quick-link-label">Hubungi</p>
+                    <p style="font-weight: 700;">Adhit Gunawan</p>
+                    <p style="font-size: 13px; color: var(--text-secondary);">Maintenance & Support Portal</p>
+                </div>
+                <a href="https://chat.whatsapp.com/EsVTFtd26UeCx49S0k2maY?s=cl&p=a&ilr=4" target="_blank" class="quick-link-box" style="text-decoration: none; color: inherit; display: block; transition: all 0.25s cubic-bezier(.4,0,.2,1);">
+                    <p class="quick-link-label">Laporan Masalah</p>
+                    <p style="font-weight: 700;">Kontak Urgent Mekanik</p>
+                    <p style="font-size: 13px; color: var(--text-secondary);">Klik untuk menghubungi grup WhatsApp — segera laporkan apabila terjadi downtime mendesak</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Portal Mekanik UBS &copy; 2026 &bull; Dikelola Adhit</p>
+        <p style="margin-top: 0.5rem; font-size: 12px;">UBS1 &amp; UBS3 &bull; MAKE MEKANIK GREAT AGAIN</p>
+    </div>
+
+    <script>
+        function scrollToEmbed() {
+            const embed = document.getElementById('embed-section');
+            embed.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && document.querySelector(href)) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+    <script>
+        // ==== Kartu role (SOP) — animasi buka/tutup halus. <details> tetap dipakai
+        // biar tetap jalan tanpa JS (accessible/fallback), tapi begitu JS aktif,
+        // tinggi kontennya dianimasikan manual (bukan snap instan bawaan browser). ====
+        (function () {
+            document.querySelectorAll('.role-card').forEach(function (card) {
+                var summary = card.querySelector('summary');
+                var body = card.querySelector('.role-card-body');
+                if (!summary || !body) return;
+
+                body.style.height = '0px';
+
+                summary.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    var opening = !card.classList.contains('is-open');
+
+                    // tutup kartu role lain dulu biar rapi (accordion), sisanya biarin nutup bareng
+                    document.querySelectorAll('.role-card.is-open').forEach(function (other) {
+                        if (other === card) return;
+                        other.classList.remove('is-open');
+                        var ob = other.querySelector('.role-card-body');
+                        if (ob) ob.style.height = '0px';
+                    });
+
+                    if (opening) {
+                        card.classList.add('is-open');
+                        body.style.height = body.scrollHeight + 'px';
+                    } else {
+                        card.classList.remove('is-open');
+                        body.style.height = '0px';
+                    }
+                });
+
+                // sinkronin tinggi kalau kartu lagi kebuka pas resize/orientasi HP berubah
+                window.addEventListener('resize', function () {
+                    if (card.classList.contains('is-open')) {
+                        body.style.height = body.scrollHeight + 'px';
+                    }
+                });
+            });
+        })();
+    </script>
+
+    <script>
+        // ==== Scroll reveal — section muncul fade+geser halus pas kesorot viewport,
+        // biar gak kaku/statis. Sekali muncul, gak diulang lagi (gak ganggu pas scroll balik). ====
+        (function () {
+            var targets = document.querySelectorAll(
+                '.hero, .embed-container, .role-card, .card, .quick-link-box, #jadwal .embed-container'
+            );
+            if (!('IntersectionObserver' in window) || !targets.length) {
+                targets.forEach(function (t) { t.classList.add('reveal-in'); });
+                return;
+            }
+            targets.forEach(function (t) { t.classList.add('reveal'); });
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-in');
+                        io.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+            targets.forEach(function (t) { io.observe(t); });
+        })();
+    </script>
+</body>
+</html>
