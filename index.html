@@ -4,962 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UBS Mekanik Portal</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#11161d">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="UBS Mekanik">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
-            --bg-primary: #ffffff;
-            --bg-secondary: #ffffff;
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
             --header-bg: #11161d;
             --header-text: #ffffff;
-            --text-primary: #1e2422;
-            --text-secondary: #5f5e5a;
-            --text-muted: #8b8d92;
-            --border-light: #e1ded2;
-            --accent: #35588a;
-            --accent-strong: #263f66;
-            --accent-light: #eaeff5;
-            --accent-teal: #0f6e56;
-            --accent-teal-light: #e5f3ee;
-            --accent-amber: #b8730f;
-            --accent-amber-light: #faf1e2;
-            --accent-slate: #4f5f6e;
-            --accent-slate-light: #edf0f2;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent: #2563eb;
+            --accent-hover: #1d4ed8;
+            --amber-bg: #fef3c7;
+            --amber-text: #92400e;
+            --amber-border: #f59e0b;
         }
 
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-primary: #14171b;
-                --bg-secondary: #1c2027;
-                --header-bg: #0b0e13;
-                --header-text: #f5f3f0;
-                --text-primary: #f0efec;
-                --text-secondary: #b8b7b2;
-                --text-muted: #8b8d92;
-                --border-light: #30343c;
-                --accent: #7b98c2;
-                --accent-strong: #9db3d6;
-                --accent-light: #1e2a3a;
-                --accent-teal: #4fb493;
-                --accent-teal-light: #17332b;
-                --accent-amber: #d69a4a;
-                --accent-amber-light: #362a15;
-                --accent-slate: #9aa7b3;
-                --accent-slate-light: #232a30;
+                --bg-primary: #0f172a;
+                --bg-card: #1e293b;
+                --header-bg: #020617;
+                --header-text: #f8fafc;
+                --text-primary: #f8fafc;
+                --text-secondary: #94a3b8;
+                --border-color: #334155;
+                --accent: #3b82f6;
+                --accent-hover: #60a5fa;
+                --amber-bg: #451a03;
+                --amber-text: #fde68a;
+                --amber-border: #d97706;
             }
         }
 
-        html, body {
-            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            font-feature-settings: 'tnum' 1, 'ss01' 1;
+        body {
+            font-family: 'IBM Plex Sans', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
-            line-height: 1.6;
+            line-height: 1.5;
+            padding-bottom: 2rem;
         }
 
         .header {
             background: var(--header-bg);
+            color: var(--header-text);
+            padding: 1rem 1.5rem;
             border-bottom: 3px solid var(--accent);
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-
-        .header-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 1rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
-
-        @media (min-width: 768px) {
-            .header-inner {
-                padding: 1.4rem 2rem;
-                gap: 2rem;
-            }
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-mark {
-            width: 30px;
-            height: 30px;
-            flex-shrink: 0;
-            background: #fff;
-            border-radius: 5px;
-            object-fit: cover;
-            padding: 2px;
         }
 
         .logo-text {
-            font-size: 16px;
+            font-size: 1.1rem;
             font-weight: 700;
-            letter-spacing: 1.2px;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            color: var(--header-text);
         }
 
-        .logo-text span {
-            color: #8aa8cc;
-        }
-
-        @media (min-width: 768px) {
-            .logo-mark {
-                width: 34px;
-                height: 34px;
-                font-size: 14px;
-            }
-            .logo-text {
-                font-size: 19px;
-                letter-spacing: 1.5px;
-            }
-        }
-
-        .nav {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            flex-wrap: wrap;
-        }
-
-        @media (min-width: 768px) {
-            .nav {
-                gap: 1.8rem;
-                font-size: 13px;
-            }
-        }
-
-        .nav a {
-            color: #b8bdc4;
-            text-decoration: none;
-            border-bottom: 2px solid transparent;
-            padding-bottom: 4px;
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
-        }
-
-        .nav a:hover {
-            color: var(--header-text);
-            border-color: var(--accent-strong);
-        }
-
-        .nav a.nav-highlight {
-            color: #d69a4a;
-            font-weight: 700;
-            border-bottom: 2px solid #d69a4a;
-        }
-
-        .nav a.nav-highlight:hover {
-            color: #f3c27d;
-            border-color: #f3c27d;
-        }
+        .logo-text span { color: var(--accent); }
 
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 1.5rem 1rem;
         }
 
-        @media (min-width: 768px) {
-            .container {
-                padding: 2rem 2rem;
-            }
-        }
-
         .hero {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-light);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
         }
 
-        .hero-text {
-            max-width: 650px;
-        }
-
-        .hero-eyebrow {
-            font-size: 12px;
+        .hero-title {
+            font-size: 1.25rem;
             font-weight: 700;
-            color: var(--accent);
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 0.6rem;
         }
 
-        .hero h1 {
-            font-size: 26px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            margin-bottom: 0.6rem;
-            text-transform: uppercase;
-        }
-
-        @media (min-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
-            }
-        }
-
-        .hero p {
-            font-size: 14px;
+        .hero-subtitle {
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            line-height: 1.5;
         }
 
-        @media (min-width: 768px) {
-            .hero p {
-                font-size: 16px;
-            }
-        }
-
-        .rekap-banner-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--accent-amber-light);
-            border: 1px solid var(--accent-amber);
-            color: var(--accent-amber);
-            padding: 10px 16px;
+        .btn-rekap {
+            background: var(--amber-bg);
+            color: var(--amber-text);
+            border: 1px solid var(--amber-border);
+            padding: 0.6rem 1rem;
             border-radius: 6px;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-title {
+            font-size: 0.9rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            transition: all 0.25s ease;
+            letter-spacing: 0.8px;
+            color: var(--text-secondary);
+            margin: 1.5rem 0 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        .rekap-banner-btn:hover {
-            background: var(--accent-amber);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(184, 115, 15, 0.25);
-        }
-
-        .section-label {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 1.6rem;
-            margin-bottom: 1.2rem;
-            padding-left: 12px;
-            border-left: 4px solid var(--accent);
-        }
-
-        @media (min-width: 768px) {
-            .section-label {
-                font-size: 14px;
-                margin-top: 2rem;
-                margin-bottom: 1rem;
-            }
+        .section-title::before {
+            content: '';
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background: var(--accent);
+            border-radius: 2px;
         }
 
         .grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 0.8rem;
-            margin-bottom: 1.2rem;
         }
 
-        @media (min-width: 640px) {
-            .grid {
-                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                gap: 1rem;
-            }
-        }
-
-        .card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-top: 3px solid var(--border-light);
-            border-radius: 4px;
-            padding: 1.2rem;
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            border-top-color: var(--accent);
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .badge {
-            display: inline-block;
-            background: var(--accent-light);
-            color: var(--accent);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 4px 12px;
-            border-radius: 3px;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            width: fit-content;
-        }
-
-        .badge-soon {
-            background: #eceae5;
-            color: #7a7a75;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .badge-soon {
-                background: #34373d;
-                color: #9a9a95;
-            }
-        }
-
-        .divider {
-            height: 1px;
-            background: var(--border-light);
-            margin: 1.5rem 0;
-        }
-
-        @media (min-width: 768px) {
-            .divider {
-                margin: 2rem 0;
-            }
-        }
-
-        .info-box {
-            background: var(--accent-light);
-            padding: 1rem 1rem 1rem 0.9rem;
-            border-radius: 4px;
-            border-left: 4px solid var(--accent);
-            margin: 1.5rem 0;
-        }
-
-        @media (min-width: 768px) {
-            .info-box {
-                padding: 1.5rem;
-                margin: 2rem 0;
-            }
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .info-box {
-                background: #223038;
-            }
-        }
-
-        .info-box p {
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        .info-box strong {
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-            display: block;
-            margin-bottom: 0.4rem;
-            color: var(--accent);
-        }
-
-        .embed-container {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-top: 3px solid var(--accent);
-            border-radius: 4px;
-            padding: 1.1rem;
-            margin: 1rem 0;
-        }
-
-        @media (min-width: 768px) {
-            .embed-container {
-                padding: 1.5rem;
-                margin: 2rem 0;
-            }
-        }
-
-        .section-icon-row {
-            display: flex;
-            align-items: flex-start;
-            gap: 14px;
-            margin-bottom: 0.9rem;
-        }
-
-        .icon-box {
-            width: 44px;
-            height: 44px;
-            flex-shrink: 0;
-            border-radius: 8px;
-            border: 1px solid var(--border-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.25s cubic-bezier(.4,0,.2,1);
-        }
-
-        .action-tile:hover .icon-box,
-        .role-card summary:hover .card-icon-box,
-        a.quick-link-box:hover .card-icon-box {
-            transform: scale(1.08);
-        }
-
-        .icon-box svg {
-            width: 22px;
-            height: 22px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        .icon-box.tone-blue,
-        .icon-box.tone-teal,
-        .icon-box.tone-amber,
-        .icon-box.tone-slate { background: var(--accent-slate-light); color: var(--accent-slate); }
-
-        @media (min-width: 768px) {
-            .icon-box { width: 50px; height: 50px; border-radius: 9px; }
-            .icon-box svg { width: 25px; height: 25px; }
-        }
-
-        .section-icon-heading h2 {
-            margin-bottom: 3px;
-        }
-
-        .section-icon-tag {
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: var(--text-muted);
-        }
-
-        .card-icon-box {
-            width: 40px;
-            height: 40px;
-            border-radius: 7px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 19px;
-            margin-bottom: 0.9rem;
-            background: var(--accent-light);
-            color: var(--accent);
-            transition: transform 0.25s cubic-bezier(.4,0,.2,1);
-        }
-
-        .role-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-top: 3px solid var(--border-light);
-            border-radius: 4px;
-            overflow: hidden;
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
-        }
-
-        .role-card[open] { border-top-color: var(--accent); }
-        .role-card.is-open { border-top-color: var(--accent); }
-
-        .role-card summary {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 1.1rem 1.2rem;
-            cursor: pointer;
-            list-style: none;
-        }
-
-        .role-card summary::-webkit-details-marker { display: none; }
-        .role-card summary::marker { content: ""; }
-
-        .role-card summary .card-icon-box { margin-bottom: 0; }
-
-        .role-card-head { flex: 1; min-width: 0; }
-
-        .role-card-head h3 {
-            font-size: 15px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 2px;
-        }
-
-        .role-card-teaser {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .role-chevron { flex-shrink: 0; color: var(--text-muted); transition: transform 0.28s cubic-bezier(.4,0,.2,1); }
-        .role-chevron svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; }
-
-        .role-card[open] .role-chevron,
-        .role-card.is-open .role-chevron { transform: rotate(180deg); }
-
-        .role-card-body {
-            overflow: hidden;
-            height: 0;
-            transition: height 0.32s cubic-bezier(.4,0,.2,1);
-        }
-
-        .role-card-body-inner {
-            padding: 0 1.2rem 1.2rem;
-            font-size: 13px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .role-card-body-inner p { margin-bottom: 0.6rem; }
-        .role-card-body-inner p:last-child { margin-bottom: 0; }
-
-        .reveal {
-            opacity: 0;
-            transform: translateY(16px);
-            transition: opacity 0.55s cubic-bezier(.4,0,.2,1), transform 0.55s cubic-bezier(.4,0,.2,1);
-        }
-
-        .reveal-in {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .reveal { opacity: 1; transform: none; transition: none; }
-        }
-
-        @keyframes rowRise {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .roster-row-anim {
-            animation: rowRise 0.5s cubic-bezier(.4,0,.2,1) both;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .roster-row-anim { animation: none; }
-        }
-
-        .roster-tabs {
-            display: flex;
-            gap: 6px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-light);
-            border-radius: 9px;
-            padding: 4px;
-            margin-bottom: 1.2rem;
-        }
-
-        .roster-tab-btn {
-            flex: 1;
-            border: none;
-            background: transparent;
-            padding: 9px 10px;
-            font-size: 12.5px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-secondary);
+        .card-link {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
-        }
-
-        .roster-tab-btn.active {
-            background: var(--accent);
-            color: #fff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
-        }
-
-        .roster-tab-btn:not(.active):hover {
-            background: var(--accent-light);
-            color: var(--accent);
-        }
-
-        .roster-slider {
-            overflow: hidden;
-            position: relative;
-            transition: height 0.35s cubic-bezier(.4,0,.2,1);
-        }
-
-        .roster-slider-track {
-            display: flex;
-            width: 200%;
-            transition: transform 0.4s cubic-bezier(.4,0,.2,1);
-        }
-
-        .roster-panel {
-            width: 50%;
-            flex-shrink: 0;
-            padding-right: 4px;
-            box-sizing: border-box;
-        }
-
-        .rotation-wheel-wrap {
-            margin-top: 1.4rem;
-            padding-top: 1.2rem;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .rotation-wheel-label {
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 0.7rem;
-        }
-
-        .rotation-wheel {
-            position: relative;
-            height: 62px;
-            border: 1px solid var(--border-light);
-            border-radius: 8px;
-            background: var(--bg-primary);
-            overflow: hidden;
-        }
-
-        .rw-col {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 33.333%;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            padding-bottom: 5px;
-        }
-
-        .rw-col:nth-of-type(1) { left: 0; }
-        .rw-col:nth-of-type(2) { left: 33.333%; border-left: 1px dashed var(--border-light); border-right: 1px dashed var(--border-light); }
-        .rw-col:nth-of-type(3) { left: 66.666%; }
-
-        .rw-col-label {
-            font-size: 9.5px;
-            font-weight: 700;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .rw-badge {
-            position: absolute;
-            top: 8px;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 13px;
-            color: #fff;
-            transition: left 0.7s cubic-bezier(.4,0,.2,1);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-
-        .rw-badge.tone-blue { background: var(--accent); }
-        .rw-badge.tone-teal { background: var(--accent-teal); }
-        .rw-badge.tone-amber { background: var(--accent-amber); }
-
-        .rw-legend {
-            display: flex;
-            gap: 14px;
-            flex-wrap: wrap;
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 0.7rem;
-        }
-
-        .rw-legend span { display: inline-flex; align-items: center; gap: 5px; }
-
-        .rw-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-
-        .rw-dot.tone-blue { background: var(--accent); }
-        .rw-dot.tone-teal { background: var(--accent-teal); }
-        .rw-dot.tone-amber { background: var(--accent-amber); }
-
-        .rw-week-indicator {
-            margin-top: 0.6rem;
-            font-size: 11px;
-            color: var(--text-muted);
-            text-align: center;
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .rw-badge { transition: none; }
-        }
-
-        .action-tile-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.7rem;
-            margin-top: 1rem;
-        }
-
-        @media (min-width: 560px) {
-            .action-tile-grid {
-                grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-            }
-        }
-
-        .action-tile {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-radius: 7px;
-            padding: 0.9rem 1rem;
+            padding: 1rem;
             text-decoration: none;
             color: var(--text-primary);
-            transition: all 0.25s cubic-bezier(.4,0,.2,1);
+            transition: all 0.2s ease;
+            display: block;
         }
 
-        .action-tile:hover {
+        .card-link:hover {
             border-color: var(--accent);
-            box-shadow: 0 5px 16px rgba(0, 0, 0, 0.09);
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
 
-        .action-tile .icon-box {
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
-        }
-
-        .action-tile .icon-box svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .action-tile-title {
-            font-size: 13px;
+        .card-title {
+            font-size: 0.95rem;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            margin-bottom: 2px;
+            margin-bottom: 0.25rem;
         }
 
-        .action-tile-desc {
-            font-size: 12px;
+        .card-desc {
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            line-height: 1.45;
         }
-
-        .action-tile.primary {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
-        .action-tile.primary.tone-teal-primary,
-        .action-tile.primary.tone-amber-primary,
-        .action-tile.primary.tone-slate-primary { background: var(--accent-strong); border-color: var(--accent-strong); }
-
-        .team-subhead {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            color: var(--text-muted);
-            margin: 1.5rem 0 0.7rem;
-            padding-top: 1.3rem;
-            border-top: 1px solid var(--border-light);
-        }
-
-        .team-subhead:first-of-type {
-            border-top: none;
-            padding-top: 0;
-            margin-top: 0.2rem;
-        }
-
-        .team-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
-        .action-tile.primary .action-tile-title { color: #fff; }
-        .action-tile.primary .action-tile-desc { color: rgba(255,255,255,0.82); }
-        .action-tile.primary .icon-box { background: rgba(255,255,255,0.18); color: #fff; }
 
         .footer {
-            background: var(--header-bg);
-            padding: 1.5rem 1rem;
             text-align: center;
-            font-size: 12px;
-            color: #b8bdc4;
-            margin-top: 3rem;
-        }
-
-        @media (min-width: 768px) {
-            .footer {
-                padding: 2rem;
-                font-size: 13px;
-            }
-        }
-
-        .footer p:first-child {
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            font-weight: 600;
-            color: var(--header-text);
-        }
-
-        @media (max-width: 640px) {
-            .nav {
-                order: 3;
-                width: 100%;
-                justify-content: flex-start;
-                gap: 1rem;
-            }
-
-            .embed-container {
-                padding: 1.2rem;
-            }
-        }
-
-        .quick-link-box {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-left: 3px solid var(--accent);
-            border-radius: 4px;
-            padding: 1rem;
-        }
-
-        a.quick-link-box:hover {
-            border-left-color: var(--accent-strong);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .attention-strip {
-            background: #fdf3e3;
-            border: 1px solid #e8c97a;
-            border-left: 3px solid #b8730f;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 0.65rem 0.9rem;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .attention-strip {
-                background: #3a331c;
-                border-color: #6b5a2a;
-                border-left-color: #d69a4a;
-            }
-        }
-
-        .attention-strip svg {
-            width: 16px;
-            height: 16px;
-            flex-shrink: 0;
-            stroke: #8a6100;
-            fill: none;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .attention-strip svg { stroke: #e8c97a; }
-        }
-
-        .attention-strip span {
-            font-size: 12px;
-            font-weight: 700;
-            color: #8a6100;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-        }
-
-        @media (prefers-color-scheme: dark) {
-            .attention-strip span {
-                color: #e8c97a;
-            }
-        }
-
-        .quick-link-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            font-weight: 700;
-        }
-
-        .responsive-table { width: 100%; border-collapse: collapse; }
-        @media (max-width: 640px) {
-            .responsive-table thead { display: none; }
-            .responsive-table, .responsive-table tbody, .responsive-table tr, .responsive-table td {
-                display: block; width: 100%;
-            }
-            .responsive-table tr {
-                margin-bottom: 0.8rem;
-                border: 1px solid var(--border-light);
-                border-radius: 6px;
-                overflow: hidden;
-            }
-            .responsive-table tr:last-child { margin-bottom: 0; }
-            .responsive-table td {
-                text-align: left !important;
-                padding: 8px 10px !important;
-                border: none !important;
-                border-bottom: 1px solid var(--border-light) !important;
-            }
-            .responsive-table td:last-child { border-bottom: none !important; }
-            .responsive-table td::before {
-                content: attr(data-label);
-                display: block;
-                font-size: 10px;
-                font-weight: 700;
-                text-transform: uppercase;
-                letter-spacing: 0.4px;
-                color: var(--accent-strong);
-                margin-bottom: 2px;
-            }
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="header-inner">
-            <div class="logo">
-                <img class="logo-mark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACgCAYAAACLz2ctAAA6sUlEQVR4nO2953skV5be+Z5rwkd62EI5mm7NjEZmpNU+2r9/99lHq91H0pgedjdZLAcUgPSZ4a85+yGBImibnCGJKlb+PlUlgMgbN9441x1D+AVgZv4lrrvn/iEi+lmv93NdaC+6D4+fQ4z/qgvsRbfnln+pGP9Ff7QX3p7v46cKUfzUL9iLb88P8VP18ZMEuBffnh/DT9HJjzKXe+Ht+Zfyl4bkv2gB9+Lb86/hL+nnBwW4F9+en4Mf0tH3CnAvvj0/J9+np5+8Ct6z5+fkOwW4t357fgm+S1ffEuBefHt+Sb6pL/FDP9yz55fgrs72c8A998pbAe6t355fk1u97S3gnntlL8A998pegHvulb0A99wrewHuuVfUfTfgPYGxOzD64S0rZtz+wi4W7IeDDm8ixugv/uJvmL0AfxzMzJanPHT19TZ23vA/33Gj9sPvhfX/sL+fM/f9/v9/fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9//fL/9Sebagai model bahasa, saya tidak dirancang untuk membantu soal itu.
+
+    <header class="header">
+        <div class="logo-text">UBS <span>MEKANIK</span></div>
+    </header>
+
+    <div class="container">
+        <!-- HERO / REKAP MINGGUAN -->
+        <div class="hero">
+            <div>
+                <div class="hero-title">Portal Laporan & Dokumentasi</div>
+                <div class="hero-subtitle">Sistem Informasi Departemen Mekanik PT UBS</div>
+            </div>
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=rekap" target="_blank" class="btn-rekap">
+                📊 Rekap Mingguan
+            </a>
+        </div>
+
+        <!-- AREA 1: LAPORAN HARIAN -->
+        <div class="section-title">Laporan Harian</div>
+        <div class="grid">
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=produksi" class="card-link">
+                <div class="card-title">Laporan Produksi</div>
+                <div class="card-desc">Input log perbaikan & maintenance harian</div>
+            </a>
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=ganti_model" class="card-link">
+                <div class="card-title">Laporan Ganti Model</div>
+                <div class="card-desc">Log proses bongkar pasang cetakan/mould</div>
+            </a>
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=trial" class="card-link">
+                <div class="card-title">Laporan Trial Mould</div>
+                <div class="card-desc">Catatan setting & uji coba cetakan baru</div>
+            </a>
+        </div>
+
+        <!-- AREA 2: JADWAL & SUSUNAN TIM -->
+        <div class="section-title">Jadwal & Susunan Tim</div>
+        <div class="grid">
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=jadwal" class="card-link">
+                <div class="card-title">Jadwal Shift & Piket</div>
+                <div class="card-desc">Jadwal kerja tim mekanik mingguan</div>
+            </a>
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=tim" class="card-link">
+                <div class="card-title">Susunan Tim Produksi & Setup</div>
+                <div class="card-desc">Struktur anggota tim produksi dan personil setup</div>
+            </a>
+        </div>
+
+        <!-- AREA 3: SOP & DOKUMENTASI TEKNIS -->
+        <div class="section-title">SOP & Dokumentasi Teknis</div>
+        <div class="grid">
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=riwayat" class="card-link">
+                <div class="card-title">Riwayat Laporan</div>
+                <div class="card-desc">Arsip dan riwayat seluruh data laporan teknis</div>
+            </a>
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=sop" class="card-link">
+                <div class="card-title">SOP Maintenance</div>
+                <div class="card-desc">Standar operasional prosedur mesin & cetakan</div>
+            </a>
+            <a href="https://script.google.com/macros/s/AKfycbzKDMLmKOZpCWKdCmg32xCF5AR8ivEWcD3cqTmcdVBD-VGo2clrbbpWsBlt6v8s6DZfvA/exec?view=manual" class="card-link">
+                <div class="card-title">Manual Book Mesin</div>
+                <div class="card-desc">Dokumentasi parameter & wiring diagram</div>
+            </a>
+        </div>
+
+        <div class="footer">
+            Departemen Mekanik - PT Usaha Bersama Sukses
+        </div>
+    </div>
+
+</body>
+</html>
