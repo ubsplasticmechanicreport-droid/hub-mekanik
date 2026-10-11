@@ -33,7 +33,7 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET' || url.origin !== self.location.origin) return;
   if (req.headers.has('range')) return; // penampil PDF meminta sebagian berkas: biarkan jaringan
 
-  if (req.mode === 'navigate') {
+  if (req.mode === 'navigate' && !url.pathname.endsWith('.pdf')) {
     event.respondWith(
       new Promise((resolve) => {
         const timer = setTimeout(() => {
