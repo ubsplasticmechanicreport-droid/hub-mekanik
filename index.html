@@ -1,67 +1,984 @@
-/* UBS Mekanik Portal — service worker
-   Halaman utama: jaringan dahulu (maks. 2,5 detik), lalu cadangan dari cache.
-   Berkas statis & PDF: tampil dari cache, diperbarui di latar belakang.
-   Dokumen pedoman disimpan lebih awal (tanpa menggagalkan pemasangan) agar dapat dibuka tanpa internet.
-   Tautan ke Apps Script (domain lain) tidak disentuh sama sekali.
-   Naikkan VERSION setiap kali ada berkas yang berubah isinya (termasuk PDF/gambar dokumen). */
-const VERSION = 'ubs-hub-v5';
-const SHELL = ['./', './index.html', './manifest.json', './logo-72.png', './icon-192.png', './icon-180.png'];
-const DOCS = [
-  './dok-memo-pedoman-reguler-v1.webp', './dok-memo-pedoman-setup-v1.webp',
-  './dok-pembagian-mesin-ubs1-rev1.webp', './dok-pembagian-mesin-ubs3-rev1.webp',
-  './dok-memo-pedoman-reguler-v1.pdf', './dok-memo-pedoman-setup-v1.pdf',
-  './dok-pembagian-mesin-ubs1-rev1.pdf', './dok-pembagian-mesin-ubs3-rev1.pdf'
-];
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex, nofollow">
+    <title>UBS Mekanik Portal</title>
+    <meta name="description" content="Portal Divisi Mekanik PT Usaha Bersama Sukses (UBS1 &amp; UBS3): pelaporan harian, checksheet, pedoman kerja, riwayat, dan susunan tim.">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e2422">
+    <link rel="icon" type="image/png" href="icon-192.png">
+    <link rel="apple-touch-icon" href="icon-180.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="UBS Mekanik">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>document.documentElement.className += ' js';</script>
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(VERSION).then((c) =>
-      c.addAll(SHELL).then(() => Promise.all(DOCS.map((u) => c.add(u).catch(() => {}))))
-    )
-  );
-  self.skipWaiting();
-});
+        /* Palet diambil langsung dari Portal Apps Script supaya Hub dan portal
+           terbaca sebagai satu sistem: kertas #FAFAF8, bilah gelap #1E2422,
+           hijau #0F6E56 sebagai warna aksi/aktif, garis hangat #E1DED2. */
+        :root {
+            --paper: #fafaf8;
+            --surface: #ffffff;
+            --sunken: #f7f6f2;
+            --ink: #1e2422;
+            --ink-70: #5f5e5a;
+            --ink-45: #74736e;
+            --line: #e1ded2;
+            --line-2: #d8d4c8;
+            --green: #0f6e56;
+            --green-deep: #0b5543;
+            --green-soft: #e1f5ee;
+            --blue: #2f5f8f;
+            --blue-soft: #eaeff5;
+            --amber: #b8730f;
+            --amber-deep: #8f5a0a;
+            --amber-soft: #faf1e2;
+            --rust: #a3402f;
+            --rust-soft: #fbe9e5;
+            --on-ink: #f4f3ef;
+            --on-ink-dim: #a9b2ad;
+            --ease: cubic-bezier(.4, 0, .2, 1);
+        }
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== VERSION).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
-});
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --paper: #151816;
+                --surface: #1d211f;
+                --sunken: #222623;
+                --ink: #11140f;
+                --ink-70: #b4b2a9;
+                --ink-45: #8d918c;
+                --line: #333a36;
+                --line-2: #3f4642;
+                --green: #4fb493;
+                --green-deep: #6ac4a6;
+                --green-soft: #17332b;
+                --blue: #86a9d2;
+                --blue-soft: #1c2733;
+                --amber: #d69a4a;
+                --amber-deep: #e0a95f;
+                --amber-soft: #332814;
+                --rust: #e08b78;
+                --rust-soft: #33201c;
+                --on-ink: #f0efec;
+                --on-ink-dim: #9aa29d;
+            }
+        }
 
-function put(request, response) {
-  if (response && response.status === 200 && response.type === 'basic') {
-    const copy = response.clone();
-    caches.open(VERSION).then((c) => c.put(request, copy));
-  }
-  return response;
-}
+        html { scroll-behavior: smooth; scroll-padding-top: var(--hdr, 130px); }
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  const url = new URL(req.url);
-  if (req.method !== 'GET' || url.origin !== self.location.origin) return;
-  if (req.headers.has('range')) return; // penampil PDF meminta sebagian berkas: biarkan jaringan
+        body {
+            font-family: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-feature-settings: 'tnum' 1;
+            background: var(--paper);
+            color: var(--ink);
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+        @media (prefers-color-scheme: dark) { body { color: #f0efec; } }
 
-  if (req.mode === 'navigate' && !url.pathname.endsWith('.pdf')) {
-    event.respondWith(
-      new Promise((resolve) => {
-        const timer = setTimeout(() => {
-          caches.match('./index.html').then((hit) => hit && resolve(hit));
-        }, 2500);
-        fetch(req)
-          .then((res) => { clearTimeout(timer); resolve(put(req, res)); })
-          .catch(() => { clearTimeout(timer); caches.match(req).then((hit) => resolve(hit || caches.match('./index.html'))); });
-      })
-    );
-    return;
-  }
+        a { color: inherit; }
+        svg.i { width: 1em; height: 1em; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+        :focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 
-  event.respondWith(
-    caches.match(req).then((hit) => {
-      const fresh = fetch(req).then((res) => put(req, res)).catch(() => hit || Response.error());
-      return hit || fresh;
-    })
-  );
-});
+        .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1rem; }
+        @media (min-width: 820px) { .wrap { padding: 0 2rem; } }
+
+        /* ===== Masthead ===== */
+        .mast { background: var(--ink); position: sticky; top: 0; z-index: 100; padding-top: env(safe-area-inset-top); }
+        .mast-in { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem 2rem; padding-top: 0.75rem; padding-bottom: 0.1rem; }
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand img { width: 30px; height: 30px; background: #fff; border-radius: 6px; padding: 2px; }
+        .brand b { color: var(--on-ink); font-size: 15px; font-weight: 600; letter-spacing: 0.2px; }
+        .brand span { display: block; color: var(--on-ink-dim); font-size: 11px; font-weight: 400; letter-spacing: 0.2px; }
+        .tabs-nav { display: flex; gap: 1.3rem; flex-wrap: wrap; font-size: 12px; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase; }
+        .tabs-nav a { color: var(--on-ink-dim); text-decoration: none; display: flex; align-items: center; min-height: 44px; padding: 0 0 2px; border-bottom: 3px solid transparent; }
+        .tabs-nav a:hover { color: #fff; }
+        @media (max-width: 719px) {
+            .mast-in { padding-bottom: 0; }
+            .tabs-nav { order: 3; width: 100%; gap: 0 0.95rem; font-size: 11.5px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+            .tabs-nav::-webkit-scrollbar { display: none; }
+            .tabs-nav a { white-space: nowrap; }
+        }
+        @media (min-width: 820px) { .brand img { width: 34px; height: 34px; } .brand b { font-size: 16px; } }
+
+        /* ===== Hero: rotasi minggu berjalan ===== */
+        .hero { background: var(--ink); color: var(--on-ink); padding-bottom: 2.2rem; }
+        .hero-in { display: grid; gap: 1.6rem; padding-top: 1.6rem; }
+        @media (min-width: 880px) { .hero-in { grid-template-columns: 1fr 380px; gap: 3rem; align-items: start; padding-top: 2.4rem; } }
+        .hero h1 { font-size: 28px; font-weight: 600; line-height: 1.2; letter-spacing: -0.4px; max-width: 16ch; }
+        @media (min-width: 880px) { .hero h1 { font-size: 38px; } }
+        .hero .lede { margin-top: 0.8rem; font-size: 15px; color: var(--on-ink-dim); max-width: 48ch; }
+        .acts { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.4rem; }
+        .act { display: inline-flex; align-items: center; gap: 9px; min-height: 46px; padding: 0 1.1rem; border-radius: 7px; background: var(--green); color: #fff; font-size: 14px; font-weight: 600; text-decoration: none; }
+        .act svg { font-size: 18px; }
+        .act:hover { background: var(--green-deep); }
+        .act.second { background: rgba(255,255,255,.09); color: var(--on-ink); box-shadow: inset 0 0 0 1px rgba(255,255,255,.22); }
+        .act.second:hover { background: rgba(255,255,255,.16); }
+        @media (prefers-color-scheme: dark) { .act { color: #0d1210; } }
+        .jump { display: flex; flex-wrap: wrap; gap: 0 1.4rem; margin-top: 1rem; padding-top: 0.6rem; border-top: 1px solid rgba(255,255,255,.13); font-size: 13px; }
+        .jump a { display: inline-flex; align-items: center; min-height: 44px; gap: 7px; color: var(--on-ink-dim); text-decoration: none; }
+        .jump a:hover { color: #fff; }
+        .jump svg { font-size: 15px; }
+
+        /* Di HP rotasi tidak ditampilkan di beranda — tabel lengkapnya ada di bagian Tim,
+           supaya tombol kerja langsung terlihat tanpa menggulir. */
+        .rota { display: none; background: var(--surface); border-radius: 9px; overflow: hidden; color: var(--ink); }
+        @media (min-width: 880px) { .rota { display: block; } }
+        @media (prefers-color-scheme: dark) { .rota { color: #f0efec; } }
+        .rota-top { padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); background: var(--sunken); }
+        .rota-top h2 { font-size: 14px; font-weight: 600; }
+        .rota-top p { font-size: 12px; color: var(--ink-70); }
+        .rota-row { display: grid; grid-template-columns: 62px 1fr auto; align-items: center; gap: 10px; padding: 0.7rem 1rem; border-bottom: 1px solid var(--line); }
+        .rota-row:last-child { border-bottom: none; }
+        .rota-sh { font-size: 12px; font-weight: 600; color: var(--ink-70); }
+        .rota-fm { font-size: 14px; font-weight: 600; }
+        .rota-tm { font-size: 12px; color: var(--ink-70); }
+        .grp { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 50%; font-size: 12px; font-weight: 700; color: #fff; }
+        .grp.A { background: var(--green); } .grp.B { background: var(--blue); } .grp.C { background: var(--amber-deep); }
+        @media (prefers-color-scheme: dark) { .grp { color: #11140f; } }
+
+        /* ===== Bagian ===== */
+        .band { padding: 2.6rem 0 0; }
+        .band:last-of-type { padding-bottom: 1rem; }
+        .band-head { max-width: 62ch; margin-bottom: 1.3rem; }
+        .band-head h2 { font-size: 21px; font-weight: 600; letter-spacing: -0.2px; }
+        .band-head h2::before { content: ""; display: block; width: 34px; height: 3px; border-radius: 2px; background: var(--green); margin-bottom: 0.7rem; }
+        .band.b-amber .band-head h2::before { background: var(--amber); }
+        .band.b-blue .band-head h2::before { background: var(--blue); }
+        .band-head p { margin-top: 0.5rem; font-size: 14px; color: var(--ink-70); }
+        .sub { font-size: 13px; font-weight: 600; color: var(--ink-70); margin: 1.5rem 0 0.7rem; }
+
+        .alertbar { display: flex; align-items: center; gap: 10px; padding: 0.7rem 0.95rem; border-radius: 7px; background: var(--amber-soft); border: 1px solid var(--line-2); border-left: 3px solid var(--amber); font-size: 13px; font-weight: 500; color: var(--amber-deep); }
+        .alertbar svg { font-size: 17px; flex-shrink: 0; }
+
+        .cols { display: grid; gap: 0.9rem; }
+        @media (min-width: 720px) { .cols.two { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 940px) { .cols.three { grid-template-columns: repeat(3, 1fr); } }
+
+        .box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 1.1rem; }
+        @media (min-width: 820px) { .box.pad { padding: 1.5rem; } }
+
+        /* Kartu sistem pelaporan */
+        .sys { display: flex; flex-direction: column; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+        .sys-top { padding: 1rem 1.1rem 0.9rem; border-top: 3px solid var(--green); }
+        .sys.s-blue .sys-top { border-top-color: var(--blue); }
+        .sys.s-slate .sys-top { border-top-color: var(--ink-45); }
+        .sys-who { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--ink-70); }
+        .sys-top h3 { font-size: 16px; font-weight: 600; margin: 0.25rem 0 0.35rem; }
+        .sys-top p { font-size: 13px; color: var(--ink-70); }
+        .sys-links { margin-top: auto; padding: 0 0.7rem 0.7rem; display: grid; gap: 4px; }
+        .go { display: flex; align-items: center; gap: 11px; padding: 0.7rem 0.75rem; border-radius: 6px; text-decoration: none; color: inherit; }
+        .go:hover { background: var(--sunken); }
+        .go.edge { border: 1px solid var(--line); }
+        .go.edge:hover { border-color: var(--line-2); }
+        .go-tx { min-width: 0; }
+        .go-t { display: block; font-size: 13.5px; font-weight: 600; line-height: 1.35; }
+        .go-d { display: block; font-size: 12.5px; color: var(--ink-70); line-height: 1.4; }
+        .go .pin { width: 32px; height: 32px; flex-shrink: 0; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 17px; background: var(--green-soft); color: var(--green); }
+        .go.lead { background: var(--green); }
+        .go.lead:hover { background: var(--green-deep); }
+        .go.lead .go-t, .go.lead .go-d { color: #fff; }
+        .go.lead .go-d { opacity: .88; }
+        .go.lead .pin { background: rgba(255,255,255,.17); color: #fff; }
+        .s-blue .go .pin { background: var(--blue-soft); color: var(--blue); }
+        .s-blue .go.lead { background: var(--blue); }
+        .s-blue .go.lead:hover { background: #26507a; }
+        .s-slate .go .pin { background: var(--sunken); color: var(--ink-70); }
+        .s-slate .go.lead { background: #4f5f5a; }
+        .s-slate .go.lead:hover { background: #3f4d49; }
+        .b-amber .go .pin { background: var(--amber-soft); color: var(--amber); }
+        .b-amber .go.lead { background: var(--amber-deep); }
+        .b-amber .go.lead:hover { background: #76490a; }
+        @media (prefers-color-scheme: dark) {
+            .go.lead .go-t, .go.lead .go-d { color: #0d1210; }
+            .go.lead .pin { background: rgba(0,0,0,.15); color: #0d1210; }
+        }
+        .flag { display: inline-block; padding: 1px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; background: var(--sunken); color: var(--ink-70); border: 1px solid var(--line); }
+        .flag.soon { background: var(--amber-soft); color: var(--amber-deep); border-color: #e8d5ab; }
+
+        .note { font-size: 13px; color: var(--ink-70); margin-top: 1rem; max-width: 76ch; }
+        .note b { color: var(--ink); font-weight: 600; }
+        @media (prefers-color-scheme: dark) { .note b { color: #f0efec; } }
+
+        /* Dokumen */
+        .doc { display: flex; align-items: flex-start; gap: 12px; padding: 0.95rem 1rem; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--green); border-radius: 7px; text-decoration: none; color: inherit; }
+        .doc.d-blue { border-left-color: var(--blue); }
+        .doc:hover { border-color: var(--line-2); border-left-color: var(--green); background: var(--sunken); }
+        .doc.d-blue:hover { border-left-color: var(--blue); }
+        .doc .pin { width: 34px; height: 34px; flex-shrink: 0; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: var(--green-soft); color: var(--green); }
+        .doc.d-blue .pin { background: var(--blue-soft); color: var(--blue); }
+        .doc h3 { font-size: 14px; font-weight: 600; line-height: 1.35; }
+        .doc .meta { display: block; font-size: 12px; color: var(--ink-45); margin: 2px 0 3px; }
+        .doc p { font-size: 12.5px; color: var(--ink-70); line-height: 1.45; }
+
+        /* ===== Tim ===== */
+        .switch { display: inline-flex; gap: 4px; padding: 4px; background: var(--sunken); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 1.1rem; }
+        .switch button { border: none; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-70); min-height: 40px; padding: 7px 18px; border-radius: 6px; cursor: pointer; }
+        .switch button.on { background: var(--green); color: #fff; }
+        @media (prefers-color-scheme: dark) { .switch button.on { color: #0d1210; } }
+
+        .slider { overflow: hidden; transition: height .3s var(--ease); }
+        .track { display: flex; align-items: flex-start; width: 200%; transition: transform .35s var(--ease); }
+        .tab-panel { width: 50%; flex-shrink: 0; padding-right: 4px; }
+
+        table.tbl { width: 100%; border-collapse: collapse; font-size: 13.5px; background: var(--surface); }
+        .tbl th { text-align: left; font-size: 12px; font-weight: 600; color: var(--ink-70); padding: 9px 12px; border-bottom: 1px solid var(--line-2); background: var(--sunken); }
+        .tbl td { padding: 10px 12px; border-bottom: 1px solid var(--line); }
+        .tbl tr:last-child td { border-bottom: none; }
+        .tbl .nm { font-weight: 600; }
+        .tbl .dim { color: var(--ink-70); }
+        .tbl-wrap { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+        @media (max-width: 680px) {
+            .tbl thead { display: none; }
+            .tbl, .tbl tbody, .tbl tr, .tbl td { display: block; width: 100%; }
+            .tbl tr { border-bottom: 1px solid var(--line-2); }
+            .tbl tr:last-child { border-bottom: none; }
+            .tbl td { border: none; padding: 4px 12px; }
+            .tbl td:first-child { padding-top: 11px; }
+            .tbl td:last-child { padding-bottom: 11px; }
+            .tbl td::before { content: attr(data-label) " "; font-size: 12px; color: var(--ink-45); }
+            .tbl td:first-child::before { content: none; }
+        }
+
+        .cycle { margin-top: 1.4rem; }
+        .cyc-grid { display: grid; grid-template-columns: auto repeat(3, 1fr); gap: 5px; max-width: 460px; }
+        .cyc-grid div { font-size: 12px; display: flex; align-items: center; justify-content: center; padding: 7px 4px; border-radius: 5px; color: var(--ink-70); }
+        .cyc-grid .hd { font-weight: 600; }
+        .cyc-grid .wk { justify-content: flex-start; padding-left: 0; padding-right: 10px; white-space: nowrap; }
+        .cyc-grid .cell { background: var(--sunken); border: 1px solid var(--line); font-weight: 600; color: var(--ink); }
+        .cyc-grid .cell.now { border-color: transparent; color: #fff; }
+        .cyc-grid .cell.now.A { background: var(--green); } .cyc-grid .cell.now.B { background: var(--blue); } .cyc-grid .cell.now.C { background: var(--amber-deep); }
+        @media (prefers-color-scheme: dark) { .cyc-grid .cell { color: #f0efec; } .cyc-grid .cell.now { color: #11140f; } }
+        .key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 0.9rem; font-size: 12.5px; color: var(--ink-70); }
+        .key span { display: inline-flex; align-items: center; gap: 7px; }
+        .key i { width: 9px; height: 9px; border-radius: 50%; }
+        .key .A { background: var(--green); } .key .B { background: var(--blue); } .key .C { background: var(--amber); }
+
+        .warn { margin-top: 0.9rem; padding: 0.7rem 0.9rem; border-radius: 7px; background: var(--rust-soft); border-left: 3px solid var(--rust); font-size: 12.5px; color: var(--rust); }
+        .warn b { font-weight: 600; }
+
+        /* Peran */
+        .role { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+        .role + .role { margin-top: 0.7rem; }
+        .role-head { width: 100%; display: flex; align-items: center; gap: 12px; padding: 0.95rem 1rem; background: none; border: none; color: inherit; font: inherit; text-align: left; cursor: pointer; }
+        .role-head .pin { width: 34px; height: 34px; flex-shrink: 0; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: var(--green-soft); color: var(--green); }
+        .role-head .rt { display: block; font-size: 14.5px; font-weight: 600; }
+        .role-head .rs { display: block; font-size: 12.5px; color: var(--ink-70); }
+        .role-head .rl { flex: 1; min-width: 0; }
+        .chev { font-size: 17px; color: var(--ink-45); transition: transform .25s var(--ease); }
+        .role.open { border-color: var(--line-2); }
+        .role.open .chev { transform: rotate(180deg); }
+        .role-body { overflow: hidden; transition: height .28s var(--ease); }
+        .js .role-body { height: 0; }
+        .role-inner { padding: 0 1rem 1.1rem; font-size: 13.5px; color: var(--ink-70); }
+        .role-inner p + p { margin-top: 0.65rem; }
+        .role-inner b { color: var(--ink); font-weight: 600; }
+        @media (prefers-color-scheme: dark) { .role-inner b { color: #f0efec; } }
+        .role-inner .link { display: inline-flex; align-items: center; gap: 7px; margin-top: 0.9rem; font-size: 13px; font-weight: 600; color: var(--green); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+
+        /* Kontak */
+        .call { display: flex; align-items: center; gap: 13px; padding: 1.05rem 1.1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; text-decoration: none; color: inherit; }
+        .call:hover { border-color: var(--line-2); background: var(--sunken); }
+        .call .pin { width: 40px; height: 40px; flex-shrink: 0; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 20px; background: var(--green-soft); color: var(--green); }
+        .call.urgent .pin { background: var(--rust-soft); color: var(--rust); }
+        .call .lbl { display: block; font-size: 12px; color: var(--ink-45); }
+        .call .nm { display: block; font-size: 14.5px; font-weight: 600; }
+        .call p { font-size: 12.5px; color: var(--ink-70); line-height: 1.4; }
+
+        .closing { margin-top: 1.4rem; padding: 1.1rem; border-radius: 8px; background: var(--sunken); border: 1px solid var(--line); font-size: 13.5px; color: var(--ink-70); }
+        .closing b { display: block; color: var(--ink); font-weight: 600; font-size: 14px; margin-bottom: 0.3rem; }
+        @media (prefers-color-scheme: dark) { .closing b { color: #f0efec; } }
+
+        .foot { margin-top: 3rem; background: var(--ink); color: var(--on-ink-dim); font-size: 12.5px; }
+        .foot .wrap { padding-top: 1.5rem; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); display: flex; flex-wrap: wrap; gap: 0.3rem 1.5rem; justify-content: space-between; }
+        .foot b { color: var(--on-ink); font-weight: 600; }
+
+        /* ===== Penampil dokumen ===== */
+        .viewer { position: fixed; inset: 0; z-index: 300; display: flex; flex-direction: column; background: #e8e6e0; }
+        .viewer[hidden] { display: none; }
+        @media (prefers-color-scheme: dark) { .viewer { background: #0e100f; } }
+        .viewer-bar { flex-shrink: 0; display: flex; align-items: center; gap: 8px; padding: calc(0.5rem + env(safe-area-inset-top)) 0.7rem 0.5rem; background: var(--ink); color: var(--on-ink); }
+        .viewer-title { flex: 1; min-width: 0; font-size: 13px; font-weight: 600; line-height: 1.3; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+        .vbtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-width: 40px; height: 40px; padding: 0 11px; border: none; border-radius: 6px; background: rgba(255,255,255,.1); color: inherit; font: inherit; font-size: 12.5px; font-weight: 600; text-decoration: none; cursor: pointer; }
+        .vbtn svg { font-size: 18px; }
+        .vbtn:hover { background: rgba(255,255,255,.2); }
+        .vbtn[disabled] { opacity: .3; cursor: default; }
+        .viewer-hint { flex-shrink: 0; padding: 0.45rem 0.8rem; background: var(--amber-soft); color: var(--amber-deep); font-size: 12.5px; text-align: center; }
+        .viewer-hint[hidden] { display: none; }
+        .viewer-body { flex: 1; overflow: auto; -webkit-overflow-scrolling: touch; padding: 12px; }
+        .viewer-inner { width: max-content; min-width: 100%; }
+        .viewer-inner img { display: block; margin: 0 auto; height: auto; background: #fff; box-shadow: 0 1px 10px rgba(0,0,0,.18); }
+        .viewer-msg { max-width: 40ch; margin: 3rem auto; text-align: center; font-size: 14px; color: var(--ink-70); }
+        .viewer-msg a { color: var(--green); font-weight: 600; }
+        body.locked { overflow: hidden; }
+        @media (max-width: 460px) { .vbtn .txt { display: none; } }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            .track, .slider, .role-body, .chev { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+            <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20 5 16.2 16.2 5A2 2 0 0 1 19 7.8L7.8 19 4 20Z"/><path d="M14 7l3 3"/></symbol>
+            <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+            <symbol id="i-report" viewBox="0 0 24 24"><path d="M9 3.5h6a1 1 0 0 1 1 1V6H8V4.5a1 1 0 0 1 1-1Z"/><rect x="5" y="5.5" width="14" height="16" rx="1.5"/><path d="M8.5 11h7M8.5 14.5h7M8.5 18h4"/></symbol>
+            <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.5 6.5a3.5 3.5 0 0 0-4.6 4.6l-6.4 6.4a1.7 1.7 0 0 0 2.4 2.4l6.4-6.4a3.5 3.5 0 0 0 4.6-4.6l-2.3 2.3-2-2 2.3-2.3Z"/></symbol>
+            <symbol id="i-tag" viewBox="0 0 24 24"><path d="M11.5 3.5 20 12l-8.5 8.5a1.7 1.7 0 0 1-2.4 0L3.5 14.9a1.7 1.7 0 0 1 0-2.4L11.5 3.5Z"/><circle cx="15.5" cy="8.5" r="1.2"/></symbol>
+            <symbol id="i-dial" viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 13 15 9.5M12 6.5V5M12 21v-1.5M5.5 13H4M20 13h-1.5"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 8.5 10.5 10 14 6.5"/><path d="M9 14.5h6M9 17h4"/></symbol>
+            <symbol id="i-print" viewBox="0 0 24 24"><path d="M7 8.5V4h10v4.5"/><rect x="5" y="8.5" width="14" height="7" rx="1"/><rect x="7" y="14" width="10" height="6"/></symbol>
+            <symbol id="i-qr" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M15 15h2v2h-2zM19 15h1M15 19h1M19 19h1"/></symbol>
+            <symbol id="i-bars" viewBox="0 0 24 24"><path d="M5 19V5m0 14h14M9 19v-6M13 19v-9M17 19v-4"/></symbol>
+            <symbol id="i-table" viewBox="0 0 24 24"><path d="M4 5h16M4 5v14a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V5M9 9h6M9 13h6M9 17h3"/></symbol>
+            <symbol id="i-db" viewBox="0 0 24 24"><path d="M4 6.5c0-1.4 3.6-2.5 8-2.5s8 1.1 8 2.5-3.6 2.5-8 2.5-8-1.1-8-2.5Z"/><path d="M4 6.5V17c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5V6.5"/><path d="M4 11.8c0 1.4 3.6 2.5 8 2.5s8-1.1 8-2.5"/></symbol>
+            <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></symbol>
+            <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3.5H7a1.5 1.5 0 0 0-1.5 1.5v14A1.5 1.5 0 0 0 7 20.5h10a1.5 1.5 0 0 0 1.5-1.5V8L14 3.5Z"/><path d="M14 3.5V8h4.5M9 12.5h6M9 16h4"/></symbol>
+            <symbol id="i-map" viewBox="0 0 24 24"><path d="M3.5 6.5 9 4.5l6 2 5.5-2v13l-5.5 2-6-2-5.5 2v-13Z"/><path d="M9 4.5v13M15 6.5v13"/></symbol>
+            <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4.5 21 19.5H3L12 4.5Z"/><path d="M12 10v4.2M12 17.2v.1"/></symbol>
+            <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+            <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="7.8" r="3.2"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></symbol>
+            <symbol id="i-users" viewBox="0 0 24 24"><circle cx="8" cy="7.8" r="2.6"/><path d="M3 19c0-3 2.2-5.4 5-5.4s5 2.4 5 5.4"/><circle cx="17" cy="9" r="2.2"/><path d="M13.5 19c.3-2.5 2-4.4 4-4.4"/></symbol>
+            <symbol id="i-lead" viewBox="0 0 24 24"><circle cx="12" cy="7.8" r="3.2"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/><path d="M9.5 6.2 12 4.5l2.5 1.7"/></symbol>
+            <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></symbol>
+            <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+            <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 11l5 5 5-5M5 20h14"/></symbol>
+            <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 12.5c0 3.9-3.6 7-8 7-1 0-2-.2-2.9-.5L4 20.5l1.6-3.8A6.7 6.7 0 0 1 4 12.5c0-3.9 3.6-7 8-7s8 3.1 8 7Z"/></symbol>
+        </defs>
+    </svg>
+
+    <header class="mast">
+        <div class="wrap mast-in">
+            <div class="brand">
+                <img src="logo-72.png" alt="" width="34" height="34" decoding="async">
+                <div>
+                    <b>UBS Mekanik Portal</b>
+                    <span>Departemen Mekanik &middot; UBS1 &amp; UBS3</span>
+                </div>
+            </div>
+            <nav class="tabs-nav" aria-label="Navigasi utama">
+                <a href="#laporan">Laporan</a>
+                <a href="#checksheet">Checksheet</a>
+                <a href="#pedoman">Pedoman</a>
+                <a href="#riwayat">Riwayat</a>
+                <a href="#tim">Tim</a>
+                <a href="#kontak">Kontak</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="beranda">
+        <div class="wrap hero-in">
+            <div>
+                <h1>Semua pekerjaan mekanik, tercatat di satu tempat.</h1>
+                <p class="lede">Laporan harian, checksheet mesin, pedoman kerja, dan riwayat perbaikan untuk UBS1 dan UBS3 — dibuka langsung dari HP, tanpa buku catatan.</p>
+                <div class="acts">
+                    <a class="act" href="https://portallaporanmekanikubsplastic.netlify.app/" target="_blank" rel="noopener"><svg class="i"><use href="#i-pen"/></svg>Isi laporan harian</a>
+                    <a class="act second" href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec" target="_blank" rel="noopener"><svg class="i"><use href="#i-check"/></svg>Isi checksheet</a>
+                </div>
+                <div class="jump">
+                    <a href="https://portallaporanmekanikubsplastic.netlify.app/log.html" target="_blank" rel="noopener"><svg class="i"><use href="#i-clock"/></svg>Log pekerjaan shift sebelumnya</a>
+                    <a href="https://portallaporanmekanikubsplastic.netlify.app/riwayat.html" target="_blank" rel="noopener"><svg class="i"><use href="#i-db"/></svg>Riwayat laporan</a>
+                    <a href="https://portallaporanmekanikubsplastic.netlify.app/mould.html" target="_blank" rel="noopener"><svg class="i"><use href="#i-wrench"/></svg>Histori mould</a>
+                    <a href="#pedoman"><svg class="i"><use href="#i-map"/></svg>Pembagian mesin saya</a>
+                </div>
+            </div>
+
+            <div class="rota">
+                <div class="rota-top">
+                    <h2>Rotasi minggu ini</h2>
+                    <p id="rotaRange"></p>
+                </div>
+                <div id="rotaBody"></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="wrap">
+        <!-- ===== Laporan harian ===== -->
+        <section id="laporan" class="band">
+            <div class="band-head">
+                <h2>Laporan harian</h2>
+                <p>Pelaporan untuk Tim Mekanik, Tim Workshop, dan Setup Labeling di UBS1 dan UBS3. Data tersimpan saat itu juga dan dapat dilihat shift berikutnya.</p>
+            </div>
+            <div class="alertbar">
+                <svg class="i"><use href="#i-alert"/></svg>
+                <span>Periksa log pekerjaan shift sebelumnya sebelum mulai bekerja.</span>
+            </div>
+
+            <div class="cols three" style="margin-top: 0.9rem;">
+                <article class="sys">
+                    <div class="sys-top">
+                        <div class="sys-who"><svg class="i"><use href="#i-report"/></svg>Tim Mekanik</div>
+                        <h3>Laporan harian mekanik</h3>
+                        <p>Status produksi, setup, trial mould, dan troubleshooting.</p>
+                    </div>
+                    <div class="sys-links">
+                        <a class="go lead" href="https://portallaporanmekanikubsplastic.netlify.app/" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-pen"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Buka form laporan</span><span class="go-d">Produksi, Setup, Trial, atau Kerusakan Belum Tuntas</span></span>
+                    </a>
+                        <a class="go edge" href="https://portallaporanmekanikubsplastic.netlify.app/log.html" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-clock"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Log pekerjaan</span><span class="go-d">Pekerjaan shift sebelumnya, periksa sebelum mulai</span></span>
+                    </a>
+                    </div>
+                </article>
+
+                <article class="sys s-blue">
+                    <div class="sys-top">
+                        <div class="sys-who"><svg class="i"><use href="#i-wrench"/></svg>Tim Workshop</div>
+                        <h3>Laporan harian workshop</h3>
+                        <p>Log kerja fabrikasi dan tooling Workshop.</p>
+                    </div>
+                    <div class="sys-links">
+                        <a class="go lead" href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-wrench"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Buka form laporan</span><span class="go-d">Input kerja fabrikasi dan tooling harian</span></span>
+                    </a>
+                        <a class="go edge" href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec?view=dashboard" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-clock"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Log pekerjaan</span><span class="go-d">Histori laporan Workshop harian</span></span>
+                    </a>
+                    </div>
+                </article>
+
+                <article class="sys s-slate">
+                    <div class="sys-top">
+                        <div class="sys-who"><svg class="i"><use href="#i-tag"/></svg>Labeling &amp; Leaktest <span class="flag soon">Dikembangkan</span></div>
+                        <h3>Laporan setup labeling</h3>
+                        <p>Form yang sama dengan Workshop — pilih panel Labeling di dalamnya.</p>
+                    </div>
+                    <div class="sys-links">
+                        <a class="go lead" href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-pen"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Buka form laporan</span><span class="go-d">Labeling dan leaktest botol, UBS1 dan UBS3</span></span>
+                    </a>
+                        <a class="go edge" href="https://script.google.com/macros/s/AKfycbzQVUuadAihx4BCoKpr75TrWN_RSIi5aO2yUZjC3JO51GIksFcUQ60Zz9rxop8JmbMx/exec?view=dashboard" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-clock"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Log pekerjaan</span><span class="go-d">Histori laporan Setup Labeling harian</span></span>
+                    </a>
+                    </div>
+                </article>
+            </div>
+            <p class="note">Simpan tautan ini di layar utama HP untuk akses cepat. Data diperbarui otomatis. Hubungi Adhit apabila terdapat kendala.</p>
+        </section>
+
+        <!-- ===== Checksheet ===== -->
+        <section id="checksheet" class="band b-amber">
+            <div class="band-head">
+                <h2>Checksheet &amp; standar parameter</h2>
+                <p>Berbeda dari laporan harian: checksheet mencatat <b>angka parameter mesin</b> yang harus selalu berada dalam standar, bukan kejadian atau kendala.</p>
+            </div>
+            <div class="box pad">
+                <div class="alertbar">
+                    <svg class="i"><use href="#i-alert"/></svg>
+                    <span>Isi pada setiap shift tanpa ditunda. Parameter di luar standar segera dilaporkan.</span>
+                </div>
+                                <div style="margin-top: 1.1rem;">
+                    <a class="go lead" href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-check"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Isi checksheet</span><span class="go-d">Preventif mesin EBM dan parameter proses EBM maupun IMM</span></span>
+                    </a>
+                </div>
+
+                <div class="sub">Standar parameter</div>
+                <div class="cols two">
+                    <a class="go edge" href="https://standarparameter.netlify.app/print" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-table"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Lihat standar parameter</span><span class="go-d">Acuan angka saat setting atau memeriksa penyimpangan</span></span>
+                    </a>
+                    <a class="go edge" href="https://standarparameter.netlify.app/" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-bars"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Isi standar parameter</span><span class="go-d">Input atau perbarui angka standar tiap parameter</span></span>
+                    </a>
+                </div>
+
+                <div class="sub">Cetak &amp; perlengkapan</div>
+                <div class="cols two">
+                    <a class="go edge" href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec?view=qrsheet" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-qr"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Lembar QR mesin</span><span class="go-d">Cetak QR untuk ditempel di panel mesin</span></span>
+                    </a>
+                    <a class="go edge" href="https://script.google.com/macros/s/AKfycbxg4RM8xhuTFbDo49dXTlAqfElLLnL1RS_EEcfBClr08WAZSmZhMWxzazDhfcYVQQjN/exec?view=print" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-print"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Cetak laporan bulanan</span><span class="go-d">Rekap checksheet preventif dan parameter per bulan</span></span>
+                    </a>
+                </div>
+
+                <p class="note">Pilih mesin terlebih dahulu, kemudian pilih Preventif (khusus EBM; 7 item, sekali sehari) atau Parameter Proses (numerik, 3 kali per shift, tersedia untuk EBM dan IMM). Apabila QR sudah terpasang di panel mesin, pindai langsung untuk melewati pemilihan mesin.</p>
+            </div>
+        </section>
+
+        <!-- ===== Pedoman ===== -->
+        <section id="pedoman" class="band">
+            <div class="band-head">
+                <h2>Pedoman kerja &amp; pembagian mesin</h2>
+                <p>Ketuk dokumen untuk membacanya langsung di halaman ini. Versi PDF dapat diunduh dari dalam tampilan.</p>
+            </div>
+
+            <div class="cols two">
+                <a class="doc" href="dok-memo-pedoman-reguler-v1.pdf">
+                    <span class="pin"><svg class="i"><use href="#i-doc"/></svg></span>
+                    <div>
+                        <h3>Memo pedoman kerja tim mekanik reguler</h3>
+                        <span class="meta">Versi 1.0 &middot; PDF</span>
+                        <p>Pedoman kerja 8 jam, kegiatan siaga, penerimaan mesin dari Tim Setup, dan penilaian.</p>
+                    </div>
+                </a>
+                <a class="doc" href="dok-memo-pedoman-setup-v1.pdf">
+                    <span class="pin"><svg class="i"><use href="#i-doc"/></svg></span>
+                    <div>
+                        <h3>Memo peraturan dan pedoman kerja tim setup</h3>
+                        <span class="meta">Versi 1.0 &middot; PDF</span>
+                        <p>Pedoman setup mesin EBM, penekanan rapi dan catat, serah terima, dan penilaian.</p>
+                    </div>
+                </a>
+                <a class="doc d-blue" href="dok-pembagian-mesin-ubs1-rev1.pdf">
+                    <span class="pin"><svg class="i"><use href="#i-map"/></svg></span>
+                    <div>
+                        <h3>Pembagian penanggung jawab mesin UBS1</h3>
+                        <span class="meta">Revisi 1, Oktober 2026 &middot; PDF</span>
+                        <p>Denah 28 mesin, pembagian Tim 1 dan Tim 2, serta zona pembelajaran IML dan robot.</p>
+                    </div>
+                </a>
+                <a class="doc d-blue" href="dok-pembagian-mesin-ubs3-rev1.pdf">
+                    <span class="pin"><svg class="i"><use href="#i-map"/></svg></span>
+                    <div>
+                        <h3>Pembagian penanggung jawab mesin UBS3</h3>
+                        <span class="meta">Revisi 1, Oktober 2026 &middot; PDF</span>
+                        <p>Denah 25 mesin, pembagian lini Backline dan Frontline, serta zona fleksibel.</p>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== Riwayat ===== -->
+        <section id="riwayat" class="band">
+            <div class="band-head">
+                <h2>Riwayat &amp; analisis</h2>
+                <p>Penelusuran masalah berulang: riwayat laporan per mesin dan per mould, histori perbaikan mould, dan informasi kerusakan mesin untuk MTC.</p>
+            </div>
+            <div class="cols two">
+                <a class="go lead" href="https://portallaporanmekanikubsplastic.netlify.app/riwayat.html" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-db"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Riwayat laporan</span><span class="go-d">Per mesin, mould, die pin, kerusakan, perbaikan, dan status komponen</span></span>
+                    </a>
+                <a class="go edge" href="https://portallaporanmekanikubsplastic.netlify.app/mould.html" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-wrench"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Histori mould</span><span class="go-d">Riwayat kerusakan dan perbaikan per mould, IMM dan EBM</span></span>
+                    </a>
+                <a class="go edge" href="https://portallaporanmekanikubsplastic.netlify.app/mtc.html" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-alert"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Informasi kerusakan mesin</span><span class="go-d">Tiket kerusakan yang menunggu tindakan MTC, bahan rapat lintas divisi</span></span>
+                    </a>
+                <a class="go edge" href="https://portallaporanmekanikubsplastic.netlify.app/rekap.html" target="_blank" rel="noopener">
+                        <span class="pin"><svg class="i"><use href="#i-trend"/></svg></span>
+                        <span class="go-tx"><span class="go-t">Rekap mingguan</span><span class="go-d">Ringkasan laporan mekanik per minggu</span></span>
+                    </a>
+            </div>
+            <p class="note">Analisis downtime per mesin, performa individual, dan perbandingan antar shift menyusul setelah data terkumpul cukup.</p>
+        </section>
+
+        <!-- ===== Tim ===== -->
+        <section id="tim" class="band">
+            <div class="band-head">
+                <h2>Susunan &amp; rotasi tim</h2>
+                <p>Lebih dari 50 mesin EBM dan IMM berjalan tiga shift nonstop. Rotasi grup berganti otomatis setiap minggu dengan siklus tiga minggu.</p>
+            </div>
+
+            <div class="box pad">
+                <div class="switch" role="tablist" aria-label="Susunan tim">
+                    <button type="button" class="on" role="tab" id="tab-produksi" aria-controls="panel-produksi" aria-selected="true" data-target="produksi">Tim Produksi</button>
+                    <button type="button" role="tab" id="tab-setup" aria-controls="panel-setup" aria-selected="false" data-target="setup">Tim Setup</button>
+                </div>
+
+                <div class="slider" id="slider">
+                    <div class="track" id="track">
+                        <div class="tab-panel" id="panel-produksi" role="tabpanel" aria-labelledby="tab-produksi">
+                            <div class="tbl-wrap"><div id="rosterTable"></div></div>
+                            <div class="cycle">
+                                <div class="sub" style="margin-top:0">Pola siklus tiga minggu</div>
+                                <div class="cyc-grid" id="cycGrid"></div>
+                                <div class="key">
+                                    <span><i class="A"></i>Grup A — Carles</span>
+                                    <span><i class="B"></i>Grup B — Jalaludin</span>
+                                    <span><i class="C"></i>Grup C — Guntur</span>
+                                </div>
+                                <p class="note">Patokan siklus 26 Juli 2026. Apabila terdapat penyesuaian mendadak di lapangan, konfirmasikan kepada Foreman atau Kasie.</p>
+                            </div>
+                        </div>
+
+                        <div class="tab-panel" id="panel-setup" role="tabpanel" aria-labelledby="tab-setup">
+                            <div class="tbl-wrap">
+                                <table class="tbl">
+                                    <thead><tr><th>Shift</th><th>Personel</th><th>Foreman minggu ini</th></tr></thead>
+                                    <tbody>
+                                        <tr><td class="nm">Shift 1</td><td data-label="Personel">Ridwan &amp; Arif</td><td class="dim" data-label="Foreman" data-fm="1"></td></tr>
+                                        <tr><td class="nm">Shift 2</td><td data-label="Personel">Boston &amp; Kodir</td><td class="dim" data-label="Foreman" data-fm="2"></td></tr>
+                                        <tr><td class="nm">Shift 3</td><td class="dim" data-label="Personel">Belum ada personel</td><td class="dim" data-label="Foreman" data-fm="3"></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <p class="warn"><b>Shift 3 belum memiliki personel setup.</b> Apabila ada kebutuhan setup mendadak pada shift ini, koordinasikan dengan Foreman atau Kasie.</p>
+                            <p class="note">Foreman shift yang bertugas pada minggu berjalan menjadi atasan langsung tim Setup pada shift tersebut. Susunan dapat berubah sewaktu-waktu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sub">Tanggung jawab &amp; batas eskalasi</div>
+            <div class="roles">
+                <div class="role open">
+                    <button type="button" class="role-head" aria-expanded="true">
+                        <span class="pin"><svg class="i"><use href="#i-user"/></svg></span>
+                        <span class="rl"><span class="rt">Mekanik reguler</span><span class="rs">Menjaga output produksi dan parameter proses</span></span>
+                        <svg class="i chev"><use href="#i-chevron"/></svg>
+                    </button>
+                    <div class="role-body"><div class="role-inner">
+                        <p>Menjaga output produksi dengan menekan angka reject melalui pengaturan parameter proses dan perbaikan yang berkaitan dengan kualitas produk, pada mesin EBM maupun IMM. Pada lini yang menggunakan robot, termasuk pengaturan parameter robot dan perbaikan end tool yang misalignment.</p>
+                        <p>Di luar tanggung jawab: kerusakan berat seperti hidraulik, perakitan mesin, dan chiller menjadi tanggung jawab <b>MTC</b>. Kendala mould atau tool dieskalasikan ke <b>WS</b>. Kendala yang rumit dilaporkan kepada Foreman.</p>
+                        <a class="link" href="dok-memo-pedoman-reguler-v1.pdf"><svg class="i"><use href="#i-doc"/></svg>Baca memo pedoman reguler</a>
+                    </div></div>
+                </div>
+
+                <div class="role">
+                    <button type="button" class="role-head" aria-expanded="false">
+                        <span class="pin"><svg class="i"><use href="#i-users"/></svg></span>
+                        <span class="rl"><span class="rt">Mekanik setup</span><span class="rs">Pergantian model dan parameter produk baru</span></span>
+                        <svg class="i chev"><use href="#i-chevron"/></svg>
+                    </button>
+                    <div class="role-body"><div class="role-inner">
+                        <p>Menangani pergantian model, meliputi pemasangan dan pelepasan mould serta pengaturan ulang parameter untuk produk baru. Apabila terdapat kendala, eskalasi kepada <b>WS</b> untuk mould atau tool, dan kepada <b>MTC</b> untuk mesin.</p>
+                        <a class="link" href="dok-memo-pedoman-setup-v1.pdf"><svg class="i"><use href="#i-doc"/></svg>Baca memo pedoman setup</a>
+                    </div></div>
+                </div>
+
+                <div class="role">
+                    <button type="button" class="role-head" aria-expanded="false">
+                        <span class="pin"><svg class="i"><use href="#i-lead"/></svg></span>
+                        <span class="rl"><span class="rt">Foreman shift</span><span class="rs">Pembimbing tim dan jenjang eskalasi pertama</span></span>
+                        <svg class="i chev"><use href="#i-chevron"/></svg>
+                    </button>
+                    <div class="role-body"><div class="role-inner">
+                        <p>Mengawasi laporan tim, membimbing anggota tim, memimpin penanganan kendala yang rumit di lapangan, serta menyusun analisis permasalahan harian untuk dibahas dengan atasan. Foreman adalah jenjang pelaporan pertama bagi mekanik reguler sebelum eskalasi lebih lanjut.</p>
+                    </div></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== Kontak ===== -->
+        <section id="kontak" class="band">
+            <div class="band-head">
+                <h2>Kontak</h2>
+            </div>
+            <div class="cols two">
+                <a class="call urgent" href="https://wa.me/62895332348361?text=%5BURGENT%5D%20Downtime%20mendesak%20-%20Mesin%3A%20%20%7C%20Gedung%3A%20%20%7C%20Kendala%3A%20" target="_blank" rel="noopener">
+                    <span class="pin"><svg class="i"><use href="#i-alert"/></svg></span>
+                    <div>
+                        <span class="lbl">Downtime mendesak</span>
+                        <span class="nm">Laporkan sekarang</span>
+                        <p>Mengirim WhatsApp ke Adhit dengan format laporan yang sudah disiapkan</p>
+                    </div>
+                </a>
+                <a class="call" href="https://wa.me/62895332348361?text=Selamat%20siang%20Pak%20Adhit%2C%20saya%20ingin%20menyampaikan%20kendala%20pada%20Portal%20Mekanik%3A%20" target="_blank" rel="noopener">
+                    <span class="pin"><svg class="i"><use href="#i-chat"/></svg></span>
+                    <div>
+                        <span class="lbl">Kendala portal atau checksheet</span>
+                        <span class="nm">Adhit Gunawan</span>
+                        <p>Form tidak terbuka, data tidak tersimpan, atau usulan perbaikan</p>
+                    </div>
+                </a>
+            </div>
+            <div class="closing">
+                <b>Siapa yang dapat membuka portal ini</b>
+                Seluruh mekanik UBS. Laporan harian terbuka untuk semua demi transparansi operasional. Data penilaian individual dibatasi untuk Foreman ke atas setelah fiturnya berjalan.
+            </div>
+        </section>
+    </main>
+
+    <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerTitle" hidden>
+        <div class="viewer-bar">
+            <button type="button" class="vbtn" id="vClose" aria-label="Tutup dokumen"><svg class="i"><use href="#i-back"/></svg><span class="txt">Kembali</span></button>
+            <div class="viewer-title" id="viewerTitle"></div>
+            <button type="button" class="vbtn" id="vOut" aria-label="Perkecil"><svg class="i"><use href="#i-minus"/></svg></button>
+            <button type="button" class="vbtn" id="vIn" aria-label="Perbesar"><svg class="i"><use href="#i-plus"/></svg></button>
+            <a class="vbtn" id="vPdf" href="#" download aria-label="Unduh PDF"><svg class="i"><use href="#i-download"/></svg><span class="txt">PDF</span></a>
+        </div>
+        <div class="viewer-hint" id="viewerHint" hidden>Dokumen ini lebar: putar HP ke posisi mendatar, atau gunakan tombol tambah untuk memperbesar.</div>
+        <div class="viewer-body" id="viewerBody"><div class="viewer-inner" id="viewerInner"></div></div>
+    </div>
+
+    <footer class="foot">
+        <div class="wrap">
+            <p><b>PT Usaha Bersama Sukses</b> — Departemen Mekanik, UBS1 &amp; UBS3</p>
+            <p>Portal internal &copy; 2026</p>
+        </div>
+    </footer>
+
+    <script>
+    (function () {
+        'use strict';
+
+        /* ===== Rotasi grup A/B/C (logika tidak diubah) ===== */
+        var GROUPS = {
+            A: { foreman: 'Carles', ubs3: 'Nugi & Heri J', ubs1: 'Adi & Ikbal' },
+            B: { foreman: 'Jalaludin', ubs3: 'Didi & Rizal', ubs1: 'Andi & Oki' },
+            C: { foreman: 'Guntur', ubs3: 'Fajar & Hamdan', ubs1: 'Arifin & Rela' }
+        };
+        var CYCLE = {
+            1: { 1: 'C', 2: 'B', 3: 'A' },
+            2: { 1: 'B', 2: 'A', 3: 'C' },
+            3: { 1: 'A', 2: 'C', 3: 'B' }
+        };
+        var ANCHOR_SUNDAY = new Date(2026, 6, 26); // 26 Jul 2026 = minggu ke-1 siklus
+
+        function sundayOfWeek(d) {
+            var r = new Date(d);
+            r.setDate(d.getDate() - d.getDay());
+            r.setHours(0, 0, 0, 0);
+            return r;
+        }
+        function mingguKe(sunday) {
+            var weeks = Math.floor((sunday - ANCHOR_SUNDAY) / (7 * 24 * 60 * 60 * 1000));
+            return (((weeks % 3) + 3) % 3) + 1;
+        }
+        function fmt(d) {
+            var bulan = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+            return d.getDate() + ' ' + bulan[d.getMonth()];
+        }
+
+        var sunday = sundayOfWeek(new Date());
+        var sabtu = new Date(sunday); sabtu.setDate(sunday.getDate() + 6);
+        var minggu = mingguKe(sunday);
+        var mapping = CYCLE[minggu];
+
+        document.getElementById('rotaRange').textContent = fmt(sunday) + ' – ' + fmt(sabtu) + ' ' + sabtu.getFullYear() + ' · minggu ke-' + minggu;
+
+        /* Ringkas di hero: shift, foreman, grup */
+        var rota = '';
+        [1, 2, 3].forEach(function (s) {
+            var g = mapping[s];
+            rota += '<div class="rota-row">' +
+                '<div class="rota-sh">Shift ' + s + '</div>' +
+                '<div><div class="rota-fm">' + GROUPS[g].foreman + '</div>' +
+                '<div class="rota-tm">' + GROUPS[g].ubs3 + ' · ' + GROUPS[g].ubs1 + '</div></div>' +
+                '<div class="grp ' + g + '" aria-label="Grup ' + g + '">' + g + '</div></div>';
+        });
+        document.getElementById('rotaBody').innerHTML = rota;
+
+        /* Tabel lengkap di bagian Tim */
+        var html = '<table class="tbl"><thead><tr><th>Shift</th><th>Foreman</th><th>Tim UBS3</th><th>Tim UBS1</th></tr></thead><tbody>';
+        [1, 2, 3].forEach(function (s) {
+            var g = GROUPS[mapping[s]];
+            html += '<tr>' +
+                '<td class="nm">Shift ' + s + '</td>' +
+                '<td data-label="Foreman">' + g.foreman + ' <span class="dim">(Grup ' + mapping[s] + ')</span></td>' +
+                '<td data-label="UBS3">' + g.ubs3 + '</td>' +
+                '<td data-label="UBS1">' + g.ubs1 + '</td></tr>';
+        });
+        document.getElementById('rosterTable').innerHTML = html + '</tbody></table>';
+
+        document.querySelectorAll('[data-fm]').forEach(function (td) {
+            var sh = parseInt(td.getAttribute('data-fm'), 10);
+            td.textContent = GROUPS[mapping[sh]].foreman + ' (Grup ' + mapping[sh] + ')';
+        });
+
+        /* Pola siklus: 3 minggu x 3 shift, minggu berjalan ditandai */
+        var cyc = '<div class="hd"></div><div class="hd">Shift 1</div><div class="hd">Shift 2</div><div class="hd">Shift 3</div>';
+        [1, 2, 3].forEach(function (w) {
+            cyc += '<div class="wk">Minggu ' + w + (w === minggu ? ' (kini)' : '') + '</div>';
+            [1, 2, 3].forEach(function (s) {
+                var g = CYCLE[w][s];
+                cyc += '<div class="cell ' + (w === minggu ? 'now ' + g : '') + '">' + g + '</div>';
+            });
+        });
+        document.getElementById('cycGrid').innerHTML = cyc;
+
+        /* ===== Tab Produksi / Setup ===== */
+        var track = document.getElementById('track');
+        var slider = document.getElementById('slider');
+        var buttons = document.querySelectorAll('.switch button');
+        var panels = { produksi: document.getElementById('panel-produksi'), setup: document.getElementById('panel-setup') };
+        var activeTab = 'produksi';
+
+        function setInert() {
+            Object.keys(panels).forEach(function (k) {
+                var off = k !== activeTab;
+                panels[k].setAttribute('aria-hidden', off ? 'true' : 'false');
+                if (off) panels[k].setAttribute('inert', ''); else panels[k].removeAttribute('inert');
+            });
+        }
+        function syncHeight() { slider.style.height = panels[activeTab].scrollHeight + 'px'; }
+        function selectTab(name) {
+            if (name === activeTab) return;
+            activeTab = name;
+            buttons.forEach(function (b) {
+                var on = b.getAttribute('data-target') === name;
+                b.classList.toggle('on', on);
+                b.setAttribute('aria-selected', on ? 'true' : 'false');
+            });
+            track.style.transform = name === 'setup' ? 'translateX(-50%)' : 'translateX(0)';
+            setInert();
+            syncHeight();
+        }
+        buttons.forEach(function (b) {
+            b.addEventListener('click', function () { selectTab(b.getAttribute('data-target')); });
+        });
+
+        var touchX = null;
+        track.addEventListener('touchstart', function (e) { touchX = e.touches[0].clientX; }, { passive: true });
+        track.addEventListener('touchend', function (e) {
+            if (touchX === null) return;
+            var dx = e.changedTouches[0].clientX - touchX;
+            if (Math.abs(dx) > 45) {
+                if (activeTab === 'produksi' && dx < 0) selectTab('setup');
+                else if (activeTab === 'setup' && dx > 0) selectTab('produksi');
+            }
+            touchX = null;
+        }, { passive: true });
+
+        setInert();
+        syncHeight();
+        window.addEventListener('load', syncHeight);
+        window.addEventListener('resize', syncHeight);
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncHeight);
+        if (window.ResizeObserver) new ResizeObserver(syncHeight).observe(panels.produksi);
+
+        /* ===== Offset jangkar mengikuti tinggi masthead ===== */
+        var mast = document.querySelector('.mast');
+        function syncHeader() {
+            document.documentElement.style.setProperty('--hdr', (mast.offsetHeight + 14) + 'px');
+        }
+        syncHeader();
+        window.addEventListener('resize', syncHeader);
+        window.addEventListener('load', syncHeader);
+        if (window.ResizeObserver) new ResizeObserver(syncHeader).observe(mast);
+
+        /* ===== Kartu peran ===== */
+        var roles = document.querySelectorAll('.role');
+        function setRole(role, open) {
+            var body = role.querySelector('.role-body');
+            role.classList.toggle('open', open);
+            role.querySelector('.role-head').setAttribute('aria-expanded', open ? 'true' : 'false');
+            body.style.height = open ? body.scrollHeight + 'px' : '0px';
+        }
+        roles.forEach(function (role) {
+            setRole(role, role.classList.contains('open'));
+            role.querySelector('.role-head').addEventListener('click', function () {
+                var willOpen = !role.classList.contains('open');
+                roles.forEach(function (r) { if (r !== role) setRole(r, false); });
+                setRole(role, willOpen);
+            });
+        });
+        window.addEventListener('resize', function () {
+            roles.forEach(function (r) {
+                if (r.classList.contains('open')) r.querySelector('.role-body').style.height = r.querySelector('.role-inner').scrollHeight + 'px';
+            });
+        });
+    })();
+    </script>
+
+    <script>
+    (function () {
+        'use strict';
+        var DOCS = {
+            'dok-memo-pedoman-reguler-v1.pdf':   { img: 'dok-memo-pedoman-reguler-v1.webp',   title: 'Memo Pedoman Kerja Tim Mekanik Reguler (Versi 1.0)' },
+            'dok-memo-pedoman-setup-v1.pdf':     { img: 'dok-memo-pedoman-setup-v1.webp',     title: 'Memo Peraturan dan Pedoman Kerja Tim Setup Mekanik (Versi 1.0)' },
+            'dok-pembagian-mesin-ubs1-rev1.pdf': { img: 'dok-pembagian-mesin-ubs1-rev1.webp', title: 'Pembagian Penanggung Jawab Mesin UBS1 (Revisi 1)', wide: true },
+            'dok-pembagian-mesin-ubs3-rev1.pdf': { img: 'dok-pembagian-mesin-ubs3-rev1.webp', title: 'Pembagian Penanggung Jawab Mesin UBS3 (Revisi 1)', wide: true }
+        };
+        var STEPS = [1, 1.5, 2, 3];
+        var viewer = document.getElementById('viewer');
+        var body = document.getElementById('viewerBody');
+        var inner = document.getElementById('viewerInner');
+        var hint = document.getElementById('viewerHint');
+        var title = document.getElementById('viewerTitle');
+        var pdfLink = document.getElementById('vPdf');
+        var btnIn = document.getElementById('vIn');
+        var btnOut = document.getElementById('vOut');
+        var btnClose = document.getElementById('vClose');
+        var img = null, step = 0, lastTrigger = null, pushed = false, curWide = false;
+
+        function baseWidth() { return Math.min(body.clientWidth - 24, 1100); }
+        function applyZoom() {
+            if (img) img.style.width = Math.round(baseWidth() * STEPS[step]) + 'px';
+            btnOut.disabled = step === 0;
+            btnIn.disabled = step === STEPS.length - 1;
+        }
+        function openDoc(pdf, trigger) {
+            var d = DOCS[pdf]; if (!d) return false;
+            lastTrigger = trigger; step = 0; curWide = !!d.wide;
+            title.textContent = d.title;
+            pdfLink.setAttribute('href', pdf);
+            inner.innerHTML = '';
+            img = new Image();
+            img.alt = d.title; img.decoding = 'async';
+            img.onerror = function () {
+                inner.innerHTML = '<p class="viewer-msg">Gambar dokumen tidak dapat dimuat. Periksa koneksi, atau <a href="' + pdf + '">unduh PDF-nya</a>.</p>';
+                img = null; applyZoom();
+            };
+            img.src = d.img;
+            inner.appendChild(img);
+            hint.hidden = !(curWide && window.innerHeight > window.innerWidth);
+            viewer.hidden = false;
+            document.body.classList.add('locked');
+            body.scrollTop = 0; body.scrollLeft = 0;
+            applyZoom();
+            history.pushState({ viewer: 1 }, '');
+            pushed = true;
+            btnClose.focus();
+            return true;
+        }
+        function closeDoc(fromPop) {
+            if (viewer.hidden) return;
+            viewer.hidden = true;
+            document.body.classList.remove('locked');
+            inner.innerHTML = ''; img = null;
+            if (!fromPop && pushed && history.state && history.state.viewer) history.back();
+            pushed = false;
+            if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+        }
+
+        document.addEventListener('click', function (e) {
+            if (e.defaultPrevented || e.button || e.ctrlKey || e.metaKey || e.shiftKey) return;
+            var a = e.target.closest('a[href$=".pdf"]');
+            if (!a || a.id === 'vPdf') return;
+            if (openDoc(a.getAttribute('href'), a)) e.preventDefault();
+        });
+        btnClose.addEventListener('click', function () { closeDoc(false); });
+        btnIn.addEventListener('click', function () { if (step < STEPS.length - 1) { step++; applyZoom(); } });
+        btnOut.addEventListener('click', function () { if (step > 0) { step--; applyZoom(); } });
+        window.addEventListener('popstate', function () { closeDoc(true); });
+        window.addEventListener('resize', function () {
+            if (!viewer.hidden) hint.hidden = !(curWide && window.innerHeight > window.innerWidth);
+            applyZoom();
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDoc(false); });
+    })();
+    </script>
+
+    <script>
+        /* Service worker: halaman termuat lebih cepat pada sinyal lemah dan dokumen dapat dibuka tanpa internet */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('./sw.js').catch(function () {});
+            });
+        }
+    </script>
+</body>
+</html>
