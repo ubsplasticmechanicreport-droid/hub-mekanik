@@ -4,7 +4,7 @@
    Dokumen pedoman disimpan lebih awal (tanpa menggagalkan pemasangan) agar dapat dibuka tanpa internet.
    Tautan ke Apps Script (domain lain) tidak disentuh sama sekali.
    Naikkan VERSION setiap kali ada berkas yang berubah isinya (termasuk PDF/gambar dokumen). */
-const VERSION = 'ubs-hub-v4';
+const VERSION = 'ubs-hub-v5';
 const SHELL = ['./', './index.html', './manifest.json', './logo-72.png', './icon-192.png', './icon-180.png'];
 const DOCS = [
   './dok-memo-pedoman-reguler-v1.webp', './dok-memo-pedoman-setup-v1.webp',
