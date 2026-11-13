@@ -1,0 +1,21 @@
+# Hub Mekanik lama (Netlify) dialihkan ke Cloudflare Pages.
+# Pengalihan sementara (302) agar tujuan masih dapat diganti kelak tanpa terhambat cache peramban.
+# Berkas lama yang mungkin masih ada di repositori dipaksa (!) ikut dialihkan.
+# /sw.js sengaja TIDAK dialihkan: berkas itu membersihkan service worker lama di ponsel.
+/                                      https://hub-mekanik-ubs.pages.dev/                                   302!
+/index.html                            https://hub-mekanik-ubs.pages.dev/                                   302!
+/manifest.json                         https://hub-mekanik-ubs.pages.dev/manifest.json                      302!
+/readme.md                             https://hub-mekanik-ubs.pages.dev/                                   302!
+/logo-72.png                           https://hub-mekanik-ubs.pages.dev/logo-72.png                        302!
+/icon-180.png                          https://hub-mekanik-ubs.pages.dev/icon-180.png                       302!
+/icon-192.png                          https://hub-mekanik-ubs.pages.dev/icon-192.png                       302!
+/icon-512.png                          https://hub-mekanik-ubs.pages.dev/icon-512.png                       302!
+/dok-memo-pedoman-reguler-v1.pdf       https://hub-mekanik-ubs.pages.dev/dok-memo-pedoman-reguler-v1.pdf    302!
+/dok-memo-pedoman-reguler-v1.webp      https://hub-mekanik-ubs.pages.dev/dok-memo-pedoman-reguler-v1.webp   302!
+/dok-memo-pedoman-setup-v1.pdf         https://hub-mekanik-ubs.pages.dev/dok-memo-pedoman-setup-v1.pdf      302!
+/dok-memo-pedoman-setup-v1.webp        https://hub-mekanik-ubs.pages.dev/dok-memo-pedoman-setup-v1.webp     302!
+/dok-pembagian-mesin-ubs1-rev1.pdf     https://hub-mekanik-ubs.pages.dev/dok-pembagian-mesin-ubs1-rev1.pdf  302!
+/dok-pembagian-mesin-ubs1-rev1.webp    https://hub-mekanik-ubs.pages.dev/dok-pembagian-mesin-ubs1-rev1.webp 302!
+/dok-pembagian-mesin-ubs3-rev1.pdf     https://hub-mekanik-ubs.pages.dev/dok-pembagian-mesin-ubs3-rev1.pdf  302!
+/dok-pembagian-mesin-ubs3-rev1.webp    https://hub-mekanik-ubs.pages.dev/dok-pembagian-mesin-ubs3-rev1.webp 302!
+/*                                     https://hub-mekanik-ubs.pages.dev/:splat                             302
